@@ -3,7 +3,324 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* Not in @theme on purpose: Tailwind already ships a built-in `ease-out`
+   utility (a different curve) that several components rely on directly. A
+   same-named token inside @theme would silently override that utility
+   everywhere. This is the site's other shared curve — the one used for
+   entrances/expansions — kept under its own name instead. */
+:root {
+    --ease-entrance: cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+@theme inline {
+    --color-background: #ffffff;
+    --color-foreground: #33424c;
+    --color-primary: #f70620;
+    --color-primary-dark: #bb0518;
+    --color-heading: #26333c;
+    --color-body: #2b3a44;
+    --color-muted: #5a6b74;
+    --color-muted-light: #6a7b84;
+    --color-subtle: #9aa5ac;
+    --color-nav: #3a4750;
+    --color-border: #eaeff2;
+    --color-border-light: #eef2f4;
+    --color-border-mid: #e2e8ec;
+    --color-surface: #f6fbfd;
+    --color-surface-alt: #fbeeef;
+    --color-footer: #1f2c34;
+    --color-footer-text: #c3ced4;
+    --color-footer-muted: #8fa0aa;
+    --color-footer-link: #b6c3ca;
+    --color-stat-grid: #e6eef2;
+    --color-pill-blue-bg: #fae8ea;
+    --color-error: #e07a7a;
+    --color-success: #3fa66a;
+
+    --font-sans: var(--font-manrope);
+    --font-heading: var(--font-pt-sans);
+
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 12px;
+    --radius-xl: 14px;
+    --radius-2xl: 16px;
+    --radius-3xl: 20px;
+    --radius-pill: 999px;
+
+    --shadow-card: 0 14px 32px rgba(38, 51, 60, 0.1);
+    --shadow-btn: 0 8px 20px rgba(247, 6, 32, 0.28);
+    --shadow-card-sm: 0 12px 28px rgba(38, 51, 60, 0.08);
+    --shadow-contact: 0 20px 48px rgba(38, 51, 60, 0.06);
+
+    --breakpoint-tablet: 56.25rem;
+    --breakpoint-mobile: 35rem;
+
+    --container-content: 75rem;
+}
+
+@custom-variant tablet (@media (width >= 56.25rem));
+@custom-variant max-tablet (@media (width < 56.25rem));
+@custom-variant max-mobile (@media (width < 35rem));
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    background: var(--color-background);
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans), var(--font-noto-sc), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Content grows; footer stays natural height and sits at the bottom */
+body > main {
+    flex: 1 0 auto;
+    width: 100%;
+}
+
+body > footer {
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-heading), var(--font-noto-sc), sans-serif;
+}
+
+@layer base {
+    a {
+        color: var(--color-primary);
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: var(--color-primary-dark);
+    }
+}
+
+@keyframes hero-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-hero-fade-up {
+    animation: hero-fade-up 450ms var(--ease-entrance) both;
+}
+
+@keyframes contact-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-contact-fade-in {
+    animation: contact-fade-in 0.35s ease;
+}
+
+@keyframes modal-scrim-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-modal-scrim-in {
+    animation: modal-scrim-in 180ms ease-out both;
+}
+
+.animate-modal-scrim-out {
+    animation: modal-scrim-in 150ms ease-in reverse both;
+}
+
+@keyframes modal-panel-in {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.animate-modal-panel-in {
+    animation: modal-panel-in 220ms var(--ease-entrance) both;
+}
+
+.animate-modal-panel-out {
+    animation: modal-panel-in 180ms var(--ease-entrance) reverse both;
+}
+
+/* Large display text reads too loose at default tracking; tighten it.
+   Small uppercase labels (Eyebrow, etc.) go the other way and stay untouched. */
+.display-heading {
+    letter-spacing: -0.01em;
+}
+
+/* 404 page only: a rare, first-time surface, so a touch more generous
+   motion than the rest of the site is in-budget here (delight tier). */
+@keyframes notfound-pump-in {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.animate-notfound-pump-in {
+    animation: notfound-pump-in 700ms var(--ease-entrance) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* The scrolled header (.header-material) is the only translucent surface on
+   the site. Under reduced transparency, make it solid instead of glassy —
+   the transparent-over-hero state is a plain scrim, not a material, and
+   stays as-is. */
+@media (prefers-reduced-transparency: reduce) {
+    .header-material {
+        background-color: white !important;
+        backdrop-filter: none !important;
+    }
+}
+
+/*
+  Engineering blueprint grid behind the home hero pump.
+  Minor: 20px cells at ~50% intensity. Major: every 5 cells (100px), slightly thicker.
+  Same alignment origin — one coordinate system, not two random overlays.
+  Radial mask fades the mesh into white; no circle border.
+*/
+.hero-blueprint-grid {
+    --grid-minor: rgba(232, 184, 189, 0.5);
+    --grid-major: #e8b8bd;
+    background-color: transparent;
+    background-image:
+        /* major vertical */ linear-gradient(to right, var(--grid-major) 0 1.75px, transparent 1.75px),
+        /* major horizontal */ linear-gradient(to bottom, var(--grid-major) 0 1.75px, transparent 1.75px),
+        /* minor vertical */ linear-gradient(to right, var(--grid-minor) 0 1px, transparent 1px),
+        /* minor horizontal */ linear-gradient(to bottom, var(--grid-minor) 0 1px, transparent 1px);
+    background-size:
+        100px 100px,
+        100px 100px,
+        20px 20px,
+        20px 20px;
+    background-repeat: repeat;
+    background-position: 0 0;
+    -webkit-mask-image: radial-gradient(
+        circle closest-side at center,
+        #000 0%,
+        #000 38%,
+        rgba(0, 0, 0, 0.92) 55%,
+        rgba(0, 0, 0, 0.75) 72%,
+        rgba(0, 0, 0, 0.45) 88%,
+        transparent 100%
+    );
+    mask-image: radial-gradient(
+        circle closest-side at center,
+        #000 0%,
+        #000 38%,
+        rgba(0, 0, 0, 0.92) 55%,
+        rgba(0, 0, 0, 0.75) 72%,
+        rgba(0, 0, 0, 0.45) 88%,
+        transparent 100%
+    );
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+}
+
+/* Progressive enhancement gate: a tiny synchronous inline script (see
+   layouts/app.blade.php <head>) adds `js` to <html> as early as possible.
+   Every hidden-until-enhanced state below is scoped under html.js, so with
+   JS disabled/broken everything in this file's rules stays at its plain,
+   fully-visible default — content is never hidden by CSS alone. */
+
+/* Scroll reveal (Reveal/RevealStagger/StatGrid in the source) — see
+   resources/js/reveal.js. */
+[data-reveal] {
+    transition:
+        opacity 420ms var(--ease-entrance),
+        transform 420ms var(--ease-entrance);
+}
+
+html.js [data-reveal]:not(.is-in-view) {
+    opacity: 0;
+    transform: translateY(var(--reveal-offset, 1rem));
+}
+
+html.js [data-reveal].is-in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Image skeleton + fade-in (ProductImage/ProjectImage in the source) — see
+   resources/js/image-fade.js. */
+[data-fade-img] {
+    transition: opacity 300ms ease;
+}
+
+html.js [data-fade-img]:not(.is-loaded) {
+    opacity: 0;
+}
+
+[data-fade-img-skeleton] {
+    transition: opacity 300ms ease;
+}
+
+html.js [data-fade-img-skeleton].is-loaded {
+    opacity: 0;
+}
+
+/* ProductImage autoFrame's --auto-scale custom property is set per-image by
+   resources/js/auto-frame.js (see hooks/useAutoFrameScale.ts in the source
+   for the sampling algorithm this replicates); the scale-[...] utility
+   itself is the literal Tailwind class from the source, kept verbatim in
+   resources/views/components/product-image.blade.php. Default is 1 (no zoom)
+   whether or not the custom property has been set yet. */

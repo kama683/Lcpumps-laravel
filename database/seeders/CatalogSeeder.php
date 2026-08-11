@@ -91,8 +91,19 @@ class CatalogSeeder extends Seeder
     private function seedProducts(array $data, array &$unresolvedSections, array &$translationGaps): void
     {
         $sectionTitleToId = [];
+        // catalog.json's sections[].products[] (not the flat products dict
+        // iterated below) is what defines display order — the source's
+        // public read path has no ORDER BY and just leans on Postgres's
+        // incidental scan order, which in practice tracks this array.
+        // Captured explicitly here since MySQL's default scan order (by
+        // primary key) doesn't match and visibly reordered every catalog
+        // grid — see the sort_order migration.
+        $sortOrderBySlug = [];
         foreach ($data['catalog']['sections'] as $section) {
             $sectionTitleToId[$section['title']] = $section['id'];
+            foreach ($section['products'] as $index => $sectionProduct) {
+                $sortOrderBySlug[$sectionProduct['slug']] = $index;
+            }
         }
 
         foreach ($data['catalog']['products'] as $product) {
@@ -111,6 +122,7 @@ class CatalogSeeder extends Seeder
                     'category' => $product['category'],
                     'section_id' => $sectionId,
                     'image' => $product['image'] ?? null,
+                    'sort_order' => $sortOrderBySlug[$product['slug']] ?? 0,
                 ]
             );
 

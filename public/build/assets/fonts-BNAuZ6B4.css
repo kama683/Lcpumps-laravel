@@ -1,0 +1,476 @@
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/manrope-400-normal-PaqtzbVb.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/manrope-400-normal-8tf8FM3T.woff") format("woff");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/manrope-400-normal-BMzJvInZ.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/manrope-400-normal-Dvx59UGC.woff") format("woff");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/manrope-400-normal-CRdE35mU.woff2") format("woff2");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/manrope-400-normal-Djnz4Wsr.woff") format("woff");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/build/assets/manrope-500-normal-BYYD-dBL.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/build/assets/manrope-500-normal-DMZssgOp.woff") format("woff");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/build/assets/manrope-500-normal-B1OEZity.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/build/assets/manrope-500-normal-CNwnNrRC.woff") format("woff");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/build/assets/manrope-500-normal-Dz8SjJZ9.woff2") format("woff2");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/build/assets/manrope-500-normal-PaLk8PaH.woff") format("woff");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/build/assets/manrope-600-normal-4f0koTD-.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/build/assets/manrope-600-normal-BqgrALkZ.woff") format("woff");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/build/assets/manrope-600-normal-DvRl3Mj-.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/build/assets/manrope-600-normal-It4mZcQk.woff") format("woff");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/build/assets/manrope-600-normal-Dk-u7o-5.woff2") format("woff2");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/build/assets/manrope-600-normal-DjQx9_jq.woff") format("woff");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/manrope-700-normal-BZp_XxE4.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/manrope-700-normal-DGRFkw-m.woff") format("woff");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/manrope-700-normal-Dw_fZAg2.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/manrope-700-normal-7JNVKxyl.woff") format("woff");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/manrope-700-normal-cq7F7ESW.woff2") format("woff2");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/manrope-700-normal-ezu7N0xg.woff") format("woff");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/build/assets/manrope-800-normal-BfWYOv1c.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/build/assets/manrope-800-normal-uHUdIJgA.woff") format("woff");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/build/assets/manrope-800-normal-AvdZ5mAV.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/build/assets/manrope-800-normal-BuEMjQU-.woff") format("woff");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/build/assets/manrope-800-normal-By7E3MqD.woff2") format("woff2");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/build/assets/manrope-800-normal-Dlsls8yD.woff") format("woff");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-400-normal-Cwy9XeGQ.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-400-normal-v0jdzXSm.woff") format("woff");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-400-normal-BgFH0IXl.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-400-normal-DR9of8nb.woff") format("woff");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-400-normal-DrEt_GuY.woff2") format("woff2");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-400-normal-BWlWxBBJ.woff") format("woff");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-700-normal-DmHhLLdt.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-700-normal-CyjbL83V.woff") format("woff");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-700-normal-TNhnPAH_.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-700-normal-DzVkanQm.woff") format("woff");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-700-normal-XWuytqPM.woff2") format("woff2");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "PT Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/pt-sans-700-normal-DtKE9zI9.woff") format("woff");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/noto-sans-sc-400-normal-C8q2FS1w.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/noto-sans-sc-400-normal-C2B4T-o7.woff") format("woff");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/build/assets/noto-sans-sc-400-normal-Ba7eOkfT.woff2") format("woff2"),
+    url("/build/assets/noto-sans-sc-400-normal-CN8EQoOj.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/build/assets/noto-sans-sc-500-normal-JVPArRf3.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/build/assets/noto-sans-sc-500-normal-Bo6Vh9-d.woff") format("woff");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/build/assets/noto-sans-sc-500-normal-z_irmif2.woff2") format("woff2"),
+    url("/build/assets/noto-sans-sc-500-normal-CtDGG6sn.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/noto-sans-sc-700-normal-BzR54Sjf.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/noto-sans-sc-700-normal-C7O-39-M.woff") format("woff");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/build/assets/noto-sans-sc-700-normal-DoUziBww.woff2") format("woff2"),
+    url("/build/assets/noto-sans-sc-700-normal-CDPtaw17.woff") format("woff");
+}
+
+:root {
+  --font-manrope: "Manrope";
+  --font-pt-sans: "PT Sans";
+  --font-noto-sc: "Noto Sans SC";
+}
+
+.font-manrope {
+  font-family: var(--font-manrope);
+}
+
+.font-pt-sans {
+  font-family: var(--font-pt-sans);
+}
+
+.font-noto-sc {
+  font-family: var(--font-noto-sc);
+}

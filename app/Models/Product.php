@@ -22,6 +22,7 @@ class Product extends Model
         'image',
         'stock_quantity',
         'price',
+        'sort_order',
     ];
 
     protected function casts(): array
@@ -29,6 +30,7 @@ class Product extends Model
         return [
             'stock_quantity' => 'integer',
             'price' => 'integer',
+            'sort_order' => 'integer',
         ];
     }
 
@@ -37,7 +39,7 @@ class Product extends Model
      * `price` and `stock_quantity` are admin-only and must never appear here.
      */
     public const array PUBLIC_VISIBLE = [
-        'slug', 'code', 'category', 'section_id', 'image', 'created_at', 'updated_at',
+        'slug', 'code', 'category', 'section_id', 'image', 'sort_order', 'created_at', 'updated_at',
     ];
 
     public function section(): BelongsTo
