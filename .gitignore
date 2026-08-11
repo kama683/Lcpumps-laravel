@@ -20,6 +20,7 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage/app/screenshot-compare
 /vendor
 _ide_helper.php
 Homestead.json
