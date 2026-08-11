@@ -1,5 +1,8 @@
 @props(['src' => null, 'alt', 'aspectRatio' => '16/10'])
-<div {{ $attributes->class('relative bg-surface overflow-hidden') }} style="aspect-ratio: {{ $aspectRatio }}">
+@php
+    $class = \App\Support\Tailwind::merge('relative bg-surface overflow-hidden', $attributes->get('class', ''));
+@endphp
+<div {{ $attributes->except('class')->merge(['class' => $class]) }} style="aspect-ratio: {{ $aspectRatio }}">
     @if ($src)
         <div
             aria-hidden="true"

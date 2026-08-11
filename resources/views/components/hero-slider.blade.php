@@ -6,7 +6,10 @@
     an acceptable no-JS fallback for a purely decorative background.
 --}}
 @props(['images'])
-<div {{ $attributes->class('absolute inset-0 z-0 overflow-hidden') }} aria-hidden="true" data-hero-slider>
+@php
+    $class = \App\Support\Tailwind::merge('absolute inset-0 z-0 overflow-hidden', $attributes->get('class', ''));
+@endphp
+<div {{ $attributes->except('class')->merge(['class' => $class]) }} aria-hidden="true" data-hero-slider>
     @foreach ($images as $index => $image)
         <img
             src="{{ $image['src'] }}"

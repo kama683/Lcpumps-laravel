@@ -9,9 +9,10 @@
 ])
 @php
     $imageSrc = $src ?? '/assets/pump.png';
+    $class = \App\Support\Tailwind::merge('relative bg-white overflow-hidden', $attributes->get('class', ''));
 @endphp
 <div
-    {{ $attributes->class('relative bg-white overflow-hidden') }}
+    {{ $attributes->except('class')->merge(['class' => $class]) }}
     style="aspect-ratio: {{ $aspectRatio }}; {{ $tilt ? 'transform-style: preserve-3d;' : '' }}"
     @if ($tilt) data-tilt @endif
 >

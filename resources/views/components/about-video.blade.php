@@ -1,12 +1,15 @@
 @props(['photoSrc', 'photoAlt', 'videoSrc' => '/assets/VIDEO.mp4'])
-@php $extra = $attributes->get('class'); @endphp
+@php
+    $extra = $attributes->get('class');
+    $class = \App\Support\Tailwind::merge('group/play absolute inset-0 size-full cursor-pointer', $extra ?? '');
+@endphp
 <button
     type="button"
     data-about-video
     data-video-src="{{ $videoSrc }}"
     data-extra-class="{{ $extra }}"
     aria-label="Воспроизвести видео"
-    {{ $attributes->class('group/play absolute inset-0 size-full cursor-pointer') }}
+    {{ $attributes->except('class')->merge(['class' => $class]) }}
 >
     <img src="{{ $photoSrc }}" alt="{{ $photoAlt }}" loading="lazy" class="absolute inset-0 size-full object-cover" />
     <span class="absolute inset-0 bg-black/15 transition-colors duration-300 group-hover/play:bg-black/25"></span>
