@@ -1,0 +1,100 @@
+<?php
+
+return [
+    'form' => [
+        'eyebrow' => 'Request',
+        'title' => 'Send a Request',
+        'intro' => 'Describe your task — we\'ll respond within 24 hours. Technical specifications can be added if needed.',
+        'contactDataSection' => 'Contact Details',
+        'fields' => [
+            'name' => 'Name',
+            'company' => 'Company',
+            'email' => 'Email',
+            'phone' => 'Phone',
+        ],
+        'messageSection' => 'Message',
+        'messagePlaceholder' => 'We need to select a pump for…',
+        'techCta' => [
+            'title' => 'Want to select equipment as accurately as possible?',
+            'description' => 'If you know the equipment specifications, fill in the technical parameters. This will help our engineers select the most suitable model.',
+            'button' => 'Add Technical Specifications',
+        ],
+        'engineering' => [
+            'eyebrow' => 'Engineering Section',
+            'title' => 'Technical Specifications',
+            'description' => 'All fields are optional — fill in what you know.',
+            'collapse' => 'Collapse',
+        ],
+        'primaryParams' => 'Primary Parameters',
+        'extraParams' => 'Additional Parameters',
+        'primaryFields' => [
+            'model' => 'Model',
+            'flow' => 'Flow rate (m³/h)',
+            'head' => 'Head (m)',
+            'power' => 'Power (kW)',
+            'speed' => 'Rotation speed (rpm)',
+            'efficiency' => 'Efficiency (%)',
+            'temperature' => 'Operating temperature (°C)',
+            'inletDiameter' => 'Inlet diameter (mm)',
+            'outletDiameter' => 'Outlet diameter (mm)',
+            'pumpMaterial' => 'Pump material',
+        ],
+        'extraFields' => [
+            'motor' => 'Motor',
+            'voltage' => 'Voltage (V)',
+            'protectionLevel' => 'Protection rating',
+            'coolingMethod' => 'Cooling method',
+            'motorEfficiency' => 'Motor efficiency (%)',
+            'weight' => 'Weight (kg)',
+        ],
+        'paramsTable' => [
+            'eyebrow' => 'Parameters Table',
+            'title' => 'Engineering Specifications Table',
+            'description' => 'Installation dimensions and weight by motor series and models. Scroll the table horizontally if it doesn\'t fit on screen.',
+        ],
+        'scheme' => [
+            'eyebrow' => 'Pump Scheme',
+            'title' => 'Diagram with Component Labels',
+            'description' => 'Check the form fields against the pump diagram (A, B, C, D…).',
+            'alt' => 'Pump diagram with component labels',
+        ],
+        'upload' => [
+            'title' => 'Drag files here',
+            'or' => 'or',
+            'chooseFile' => 'choose a file',
+            'hint' => 'PDF, DWG, DOCX, XLSX, images — up to 10 MB',
+        ],
+        'submit' => 'Send Request',
+        'submitHint' => 'We\'ll respond within 24 hours.',
+        'success' => 'Thank you! We\'ll get back to you within 24 hours.',
+        'errors' => [
+            'missingFields' => 'Please fill in your name and email.',
+            'invalidEmail' => 'Please enter a valid email address.',
+            'invalidFileType' => 'Unsupported file type: :detail',
+            'fileTooLarge' => 'File ":detail" is too large (max 15 MB).',
+            'totalSizeExceeded' => 'Total attachment size exceeds 40 MB.',
+            'unknown' => 'Something went wrong. Please try again or contact us directly.',
+            'rateLimited' => 'Too many submissions. Please try again later.',
+        ],
+        'submitting' => 'Sending…',
+    ],
+    'direct' => [
+        'title' => 'Have questions?',
+        'description' => 'Contact us directly — our engineers and project managers are always available.',
+        'address' => [
+            'label' => 'Address',
+            'value' => 'Industrial Zone, 205a',
+        ],
+        'email' => [
+            'label' => 'Email',
+        ],
+        'phone' => [
+            'label' => 'Phone',
+        ],
+        'hours' => [
+            'label' => 'Working Hours',
+            'value' => 'Mon–Fri, 09:00–18:00',
+            'timezoneNote' => '(UTC+5, Almaty)',
+        ],
+    ],
+];

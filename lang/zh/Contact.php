@@ -1,0 +1,100 @@
+<?php
+
+return [
+    'form' => [
+        'eyebrow' => '咨询申请',
+        'title' => '发送咨询',
+        'intro' => '请描述您的需求——我们将在24小时内回复。技术参数为选填项。',
+        'contactDataSection' => '联系信息',
+        'fields' => [
+            'name' => '姓名',
+            'company' => '公司',
+            'email' => '电子邮箱',
+            'phone' => '电话',
+        ],
+        'messageSection' => '留言',
+        'messagePlaceholder' => '需要为……选型水泵',
+        'techCta' => [
+            'title' => '希望更精确地选配设备？',
+            'description' => '如果您了解设备的技术参数，请填写技术参数。这将帮助工程师为您选择最合适的型号。',
+            'button' => '添加技术参数',
+        ],
+        'engineering' => [
+            'eyebrow' => '工程参数',
+            'title' => '技术参数',
+            'description' => '所有字段均为选填——请填写您已知的信息。',
+            'collapse' => '收起',
+        ],
+        'primaryParams' => '主要参数',
+        'extraParams' => '附加参数',
+        'primaryFields' => [
+            'model' => '型号',
+            'flow' => '流量（m³/h）',
+            'head' => '扬程（m）',
+            'power' => '功率（kW）',
+            'speed' => '转速（r/min）',
+            'efficiency' => '效率（%）',
+            'temperature' => '工作温度（°C）',
+            'inletDiameter' => '进口直径（mm）',
+            'outletDiameter' => '出口直径（mm）',
+            'pumpMaterial' => '泵体材质',
+        ],
+        'extraFields' => [
+            'motor' => '电机',
+            'voltage' => '电压（V）',
+            'protectionLevel' => '防护等级',
+            'coolingMethod' => '冷却方式',
+            'motorEfficiency' => '电机效率（%）',
+            'weight' => '重量（kg）',
+        ],
+        'paramsTable' => [
+            'eyebrow' => '参数表',
+            'title' => '工程参数表',
+            'description' => '按电机系列和型号列出的安装尺寸及重量。如表格超出屏幕，请左右滑动查看。',
+        ],
+        'scheme' => [
+            'eyebrow' => '泵体示意图',
+            'title' => '带部件标注的示意图',
+            'description' => '请对照泵体示意图核对表单字段（A、B、C、D…）。',
+            'alt' => '带部件标注的水泵示意图',
+        ],
+        'upload' => [
+            'title' => '将文件拖放到此处',
+            'or' => '或',
+            'chooseFile' => '选择文件',
+            'hint' => 'PDF、DWG、DOCX、XLSX、图片——最大10 MB',
+        ],
+        'submit' => '发送咨询',
+        'submitHint' => '我们将在24小时内回复。',
+        'success' => '谢谢！我们将在24小时内与您联系。',
+        'errors' => [
+            'missingFields' => '请填写您的姓名和电子邮箱。',
+            'invalidEmail' => '请输入有效的电子邮箱地址。',
+            'invalidFileType' => '不支持的文件类型：:detail',
+            'fileTooLarge' => '文件“:detail”过大（最大 15 MB）。',
+            'totalSizeExceeded' => '附件总大小超过 40 MB。',
+            'unknown' => '出现问题，请重试或直接联系我们。',
+            'rateLimited' => '提交次数过多，请稍后再试。',
+        ],
+        'submitting' => '发送中…',
+    ],
+    'direct' => [
+        'title' => '还有疑问？',
+        'description' => '直接与我们联系——我们的工程师和项目经理随时为您服务。',
+        'address' => [
+            'label' => '地址',
+            'value' => '工业区205a栋',
+        ],
+        'email' => [
+            'label' => '邮箱',
+        ],
+        'phone' => [
+            'label' => '电话',
+        ],
+        'hours' => [
+            'label' => '工作时间',
+            'value' => '周一至周五 09:00–18:00',
+            'timezoneNote' => '（UTC+5，阿拉木图）',
+        ],
+    ],
+];
