@@ -13,7 +13,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SolutionsController;
 use App\Support\Routing\LocalizedRoutes;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +61,9 @@ LocalizedRoutes::register(function (): void {
 
     Route::get('/solutions', [SolutionsController::class, 'index'])->name('solutions.index');
 });
+
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.xml');
+Route::get('/robots.txt', [RobotsController::class, 'index'])->name('robots.txt');
 
 // next-intl's localePrefix: "as-needed" 307-redirects an explicit /ru/...
 // request (ru being the default locale) to the unprefixed URL instead of

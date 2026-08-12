@@ -4,6 +4,27 @@ Full deployment runbook is Stage 10. This file currently only holds the
 PHP settings the contact form (Stage 6) requires — added early because they
 need to be set in Plesk regardless of when the rest of this doc is written.
 
+## APP_URL and canonical host (required)
+
+Before any deploy, verify `APP_URL` in `.env` and the live Plesk app config is
+set to `https://www.lcpumps.kz` exactly, not the old `lcpumps.com` or a bare
+root-domain variant.
+
+This is not cosmetic: the sitemap, canonical URLs, and hreflang alternates are
+all built from `config('app.url')`, not from the request's `Host` header. An
+incorrect value produces a sitemap and canonical tags on the wrong domain, and
+Google will treat the live URLs as redirecting to the wrong origin. The public
+site answers only on `www`, while the bare domain is a 302 redirect from the
+registrar, so `https://www.lcpumps.kz` is the correct canonical host.
+
+Also verify the mail addresses in `.env` match the live domain:
+
+```env
+APP_URL=https://www.lcpumps.kz
+MAIL_FROM_ADDRESS="no-reply@lcpumps.kz"
+CONTACT_NOTIFY_TO=info@lcpumps.kz
+```
+
 ## PHP settings (Plesk → Domains → \<domain\> → PHP Settings)
 
 Required for the contact form's attachment upload limits (15 MB/file, 40 MB
