@@ -28,7 +28,12 @@ const fs = require('fs');
 // page lands — this list is meant to grow to all ~18 pages by Stage 10.
 const PAGES = {
   home: '',
+  products: '/products',
   pumps: '/products/pumps',
+  valves: '/products/valves',
+  control: '/products/control',
+  water: '/products/water',
+  productDetail: '/products/sls',
 };
 
 const DEFAULT_LOCALES = [

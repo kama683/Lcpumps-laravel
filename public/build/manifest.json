@@ -219,8 +219,47 @@
     "file": "assets/pt-sans-700-normal-XWuytqPM.woff2",
     "src": "_pt-sans-700-normal-XWuytqPM.woff2"
   },
+  "node_modules/canvg/lib/index.es.js": {
+    "file": "assets/index.es-WAeany0P.js",
+    "name": "index.es",
+    "src": "node_modules/canvg/lib/index.es.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js",
+      "node_modules/jspdf/dist/jspdf.es.min.js"
+    ]
+  },
+  "node_modules/dompurify/dist/purify.es.mjs": {
+    "file": "assets/purify.es-JEAr64Sr.js",
+    "name": "purify.es",
+    "src": "node_modules/dompurify/dist/purify.es.mjs",
+    "isDynamicEntry": true
+  },
+  "node_modules/html2canvas/dist/html2canvas.js": {
+    "file": "assets/html2canvas-Ck8bTpv8.js",
+    "name": "html2canvas",
+    "src": "node_modules/html2canvas/dist/html2canvas.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ]
+  },
+  "node_modules/jspdf/dist/jspdf.es.min.js": {
+    "file": "assets/jspdf.es.min-B431erEO.js",
+    "name": "jspdf.es.min",
+    "src": "node_modules/jspdf/dist/jspdf.es.min.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "dynamicImports": [
+      "node_modules/html2canvas/dist/html2canvas.js",
+      "node_modules/dompurify/dist/purify.es.mjs",
+      "node_modules/canvg/lib/index.es.js"
+    ]
+  },
   "resources/css/app.css": {
-    "file": "assets/app-B_3RlrL9.css",
+    "file": "assets/app-D3qIMfMP.css",
     "name": "app",
     "names": [
       "app.css"
@@ -229,9 +268,13 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-CMOf6XXE.js",
+    "file": "assets/app-Cv_24uwW.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true
+    "isEntry": true,
+    "dynamicImports": [
+      "node_modules/html2canvas/dist/html2canvas.js",
+      "node_modules/jspdf/dist/jspdf.es.min.js"
+    ]
   }
 }

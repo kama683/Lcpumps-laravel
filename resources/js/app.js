@@ -8,6 +8,8 @@ import { initHeroSlider } from './hero-slider';
 import { initAboutVideo } from './about-video';
 import { initCatalogPanel } from './catalog-panel';
 import { initCatalogSearch } from './catalog-search';
+import { initTilt } from './tilt';
+import { initProductDownload } from './product-download';
 
 function boot() {
     initHeader();
@@ -20,6 +22,8 @@ function boot() {
     initAboutVideo();
     initCatalogPanel();
     initCatalogSearch();
+    initTilt();
+    initProductDownload();
 }
 
 if (document.readyState === 'loading') {

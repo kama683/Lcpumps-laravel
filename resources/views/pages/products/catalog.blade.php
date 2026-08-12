@@ -5,7 +5,7 @@
         '/products/valves' => 'products.valves',
     ];
 @endphp
-<x-layouts.app :title="$title">
+<x-layouts.app :title="$metaTitle">
     <x-page-container class="pt-12">
         <div class="relative w-full min-h-100 rounded-2xl overflow-hidden flex flex-col justify-center px-6 py-10 tablet:px-12">
             <x-category-hero-image
@@ -18,7 +18,7 @@
             <div class="relative z-10">
                 <x-breadcrumb :items="$breadcrumb" :light="true" />
                 <h1 data-catalog-heading class="display-heading font-heading font-bold text-[clamp(32px,4.2vw,44px)] text-white mt-6 leading-tight">
-                    {{ $panelLabels[$defaultPanelId] ?? $title }}
+                    {{ $heading }}
                 </h1>
                 <p class="text-[17px] leading-relaxed text-white/85 mt-4.5 max-w-[880px]">
                     {{ $intro }}
@@ -47,7 +47,7 @@
                         aria-expanded="false"
                         class="tablet:hidden flex w-full items-center justify-between gap-3 rounded-lg border border-border-light bg-white px-5 py-3.5 text-left text-sm font-semibold text-heading"
                     >
-                        <span data-active-panel-label class="truncate">{{ $panelLabels[$defaultPanelId] ?? '' }}</span>
+                        <span data-active-panel-label class="truncate">{{ $defaultPanelLabel }}</span>
                         <x-icon name="chevron-down" data-category-menu-chevron stroke-width="2.25" class="size-4 shrink-0 text-primary transition-transform duration-200" />
                     </button>
                     <div data-category-menu class="grid transition-[grid-template-rows] duration-300 ease-(--ease-entrance) tablet:grid-rows-[1fr] grid-rows-[0fr]">
