@@ -219,24 +219,9 @@ class AuthTest extends TestCase
         $this->assertFalse(Auth::guard('admin')->check());
     }
 
-    public function test_stage_8_stub_routes_resolve_behind_auth(): void
-    {
-        $admin = $this->makeAdmin('admin', 'correct-password');
-        $this->actingAs($admin, 'admin');
-
-        // Same route/param the Stage 6 notification email links to.
-        $this->get(route('admin.requests.show', ['id' => 'abc-123']))->assertOk();
-        $this->get(route('admin.requests.index'))->assertOk();
-        $this->get(route('admin.products.index'))->assertOk();
-        $this->getJson(route('admin.attachments.download', ['id' => 'abc-123']))->assertStatus(501);
-    }
-
-    public function test_stage_8_stub_routes_are_still_protected(): void
-    {
-        $this->get(route('admin.requests.show', ['id' => 'abc-123']))
-            ->assertRedirect(route('admin.login'));
-
-        $this->getJson(route('admin.attachments.download', ['id' => 'abc-123']))
-            ->assertStatus(401);
-    }
+    // Stage 7's coverage here (routes resolve behind admin.auth, unauth
+    // gets redirected/401) is superseded by Stage 8's real controllers —
+    // see ProductAdminTest::test_product_admin_routes_require_authentication
+    // and RequestAdminTest::test_request_admin_routes_require_authentication,
+    // which exercise the same routes with real (not stub) responses.
 }

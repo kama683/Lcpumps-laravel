@@ -86,12 +86,19 @@ Route::prefix('admin')->name('admin.')->group(function (): void {
     Route::middleware('admin.auth')->group(function (): void {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        // Stage 8 stubs, registered now (already behind admin.auth) so
-        // links to them — e.g. the Stage 6 notification email's
-        // admin.requests.show — resolve instead of 404ing.
         Route::get('/products', [AdminProductController::class, 'index'])->name('products.index');
+        // /create MUST be registered before /{slug}/... — Laravel matches
+        // routes in registration order (see the public-routes comment
+        // above for the same rule).
+        Route::get('/products/create', [AdminProductController::class, 'create'])->name('products.create');
+        Route::post('/products', [AdminProductController::class, 'store'])->name('products.store');
+        Route::get('/products/{slug}/edit', [AdminProductController::class, 'edit'])->name('products.edit');
+        Route::put('/products/{slug}', [AdminProductController::class, 'update'])->name('products.update');
+        Route::delete('/products/{slug}', [AdminProductController::class, 'destroy'])->name('products.destroy');
+
         Route::get('/requests', [AdminRequestController::class, 'index'])->name('requests.index');
         Route::get('/requests/{id}', [AdminRequestController::class, 'show'])->name('requests.show');
+        Route::delete('/requests/{id}', [AdminRequestController::class, 'destroy'])->name('requests.destroy');
     });
 });
 

@@ -1,42 +1,54 @@
-{{--
-    Stage 7: functional only. Visual design belongs to Stage 8, which owns
-    the admin panel's styling system — don't pre-empt it here.
---}}
+{{-- Ported from app/admin/login/page.tsx — same layout/tokens, plain POST form instead of a client Server Action. --}}
 <!doctype html>
 <html lang="ru">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <title>LCPumps Admin — Вход</title>
-    <style>
-        body { font-family: sans-serif; display: flex; min-height: 100vh; align-items: center; justify-content: center; background: #f5f5f5; margin: 0; }
-        .card { width: 100%; max-width: 360px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 2rem; }
-        h1 { font-size: 1.25rem; margin: 0 0 1.5rem; }
-        label { display: block; font-size: 0.875rem; margin-bottom: 0.25rem; }
-        input { width: 100%; box-sizing: border-box; padding: 0.6rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; }
-        button { width: 100%; padding: 0.7rem; background: #f70620; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .error { color: #c0392b; font-size: 0.875rem; margin: 0 0 1rem; }
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{ Vite::fonts() }}
 </head>
-<body>
-    <div class="card">
-        <h1>LCPumps Admin</h1>
+<body class="bg-surface">
+    <div class="flex min-h-dvh items-center justify-center px-6 py-12">
+        <div class="w-full max-w-[380px] rounded-2xl border border-border-mid bg-white p-8 shadow-card-sm">
+            <div class="mb-6 text-center">
+                <div class="mb-1 text-xs font-bold uppercase tracking-[1.4px] text-primary">LCPumps Admin</div>
+                <h1 class="font-heading text-2xl font-bold text-heading">Вход</h1>
+            </div>
 
-        @if ($errors->has('login'))
-            <p class="error">{{ $errors->first('login') }}</p>
-        @endif
+            <form method="POST" action="{{ route('admin.login.attempt') }}" class="flex flex-col gap-4">
+                @csrf
 
-        <form method="POST" action="{{ route('admin.login.attempt') }}">
-            @csrf
+                <input
+                    class="w-full rounded-md border border-border-mid bg-white px-4 py-3.5 text-[15px] text-body placeholder:text-subtle focus:border-primary focus:shadow-[0_0_0_3px_rgba(247,6,32,0.12)] focus:outline-none"
+                    type="text"
+                    name="username"
+                    placeholder="Логин"
+                    value="{{ old('username') }}"
+                    autocomplete="username"
+                    autofocus
+                >
+                <input
+                    class="w-full rounded-md border border-border-mid bg-white px-4 py-3.5 text-[15px] text-body placeholder:text-subtle focus:border-primary focus:shadow-[0_0_0_3px_rgba(247,6,32,0.12)] focus:outline-none"
+                    type="password"
+                    name="password"
+                    placeholder="Пароль"
+                    autocomplete="current-password"
+                >
 
-            <label for="username">Логин</label>
-            <input type="text" id="username" name="username" value="{{ old('username') }}" autocomplete="username" autofocus>
+                @if ($errors->has('login'))
+                    <p class="text-sm font-semibold text-error">{{ $errors->first('login') }}</p>
+                @endif
 
-            <label for="password">Пароль</label>
-            <input type="password" id="password" name="password" autocomplete="current-password">
-
-            <button type="submit">Войти</button>
-        </form>
+                <button
+                    type="submit"
+                    class="mt-2 w-full rounded-sm bg-primary py-3.5 text-base font-bold text-white shadow-btn transition-[background,transform] duration-200 hover:-translate-y-0.5 hover:bg-primary-dark"
+                >
+                    Войти
+                </button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

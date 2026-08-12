@@ -1,9 +1,10 @@
 # STATUS — LCpumps Next.js → Laravel migration
 
 Сводный статус проекта, собранный из фактического состояния файлов, `git log`
-и `git status` в `laravel/` на **2026-08-12**. Составлено одной из двух
-параллельно работающих сессий — раздел 3 описывает работу второй сессии по
-её файлам, без предположений о том, что "должно быть сделано".
+и `git status` в `laravel/` на **2026-08-12**. Изначально составлено одной из
+двух параллельно работающих сессий (раздел 3 описывает работу второй сессии
+по её файлам); раздел про этапы 6–8 обновлён самой второй сессией по факту
+своей работы после ревью и завершения этапа 8.
 
 Это не план и не журнал работ — это срез состояния на момент составления.
 При следующем перезапуске сверяйте этот файл с `git log`/`git status`
@@ -20,9 +21,9 @@
 | 3 | Сидеры (каталог, admin-пользователь) | **Готово** |
 | 4 | Локализация и роутинг | **Готово** |
 | 5 | Публичные страницы | **Частично** |
-| 6 | Форма заявки (backend) | **Готово, не закоммичено** |
-| 7 | Админ-авторизация | **Готово (кроме визуала), не закоммичено** |
-| 8 | Админ-панель (CRUD, заявки, вложения) | **Не начато** |
+| 6 | Форма заявки (backend) | **Готово, закоммичено** (commit `93b45a3`) |
+| 7 | Админ-авторизация | **Готово (кроме визуала — см. этап 8), закоммичено** (commit `aeb5982`) |
+| 8 | Админ-панель (CRUD, заявки, вложения) | **Готово** |
 | 9 | SEO / статика (sitemap, hreflang, robots) | **Не начато** |
 | 10 | Сборка и деплой | **Частично** |
 
@@ -37,34 +38,74 @@
 `/about-us/{slug}`, `/contact` (GET-страница; POST-обработчик уже реализован
 второй сессией, см. этап 6), `/faq`, `/news`, `/services`, `/solutions`.
 
-### Этап 6 — детали (готово, не закоммичено)
+### Этап 6 — детали (готово, закоммичено)
 
-Полностью реализовано второй сессией в рабочем дереве, но **ни один файл не
-закоммичен в git** (см. раздел 3 и раздел 4 — риск потери при неосторожной
-git-операции): валидация, honeypot, rate-limit, проверка магических байт
+Коммит `93b45a3`. Валидация, honeypot, rate-limit, проверка магических байт
 файла, приватное хранилище вложений, запись в БД в транзакции с откатом
 файлов при ошибке, письмо-уведомление с изоляцией сбоя отправки, обработка
-превышения `post_max_size` на уровне PHP. 15 фича-тестов зелёные (см. раздел
-3). Не хватает: Blade-разметки страницы `/contact` (этап 5, батч 5, ещё не
-начат) — контракт между сторонами проверен и сходится, см. раздел 4.
+превышения `post_max_size` на уровне PHP. После ревью дополнительно
+исправлено (входит в тот же коммит): `?contactFormError=` теперь несёт
+белый список кодов ошибки, а не готовый переведённый текст (была реальная
+уязвимость — query-параметр отражался бы как есть); письмо-уведомление
+показывает технические поля в каноническом порядке
+(`ContactSubmissionHandler::PRIMARY_TECH_KEYS`/`EXTRA_TECH_KEYS`), а не в
+порядке ключей JSON, который MySQL не гарантирует. Не хватает: Blade-
+разметки страницы `/contact` (этап 5, батч 5, ещё не начат) — контракт
+между сторонами проверен и сходится, см. раздел 4.
 
-### Этап 7 — детали (готово кроме визуала, не закоммичено)
+### Этап 7 — детали (готово, закоммичено)
 
-Логин/логаут, guard на сессиях, rate-limit, middleware `admin.auth`/
-`admin.guest`, регенерация сессии при логине. 15 тестов зелёные. Вёрстка
-login/dashboard — намеренно голый HTML без стилей (явно помечено в коде как
-Stage 8 scope). Dashboard показывает только имя пользователя и кнопку
-выхода — реального контента нет.
+Коммит `aeb5982`. Логин/логаут, guard на сессиях, rate-limit, middleware
+`admin.auth`/`admin.guest`, регенерация сессии при логине,
+`config/trustedproxy.php` (защита лимитера от спуфинга `X-Forwarded-For`,
+общая с этапом 6). Визуальное оформление login/dashboard теперь настоящее
+(см. этап 8 — раньше было голым HTML).
 
-### Этап 8 — детали (не начато)
+### Этап 8 — детали (готово)
 
-Маршруты зарегистрированы и защищены `admin.auth`, чтобы ссылка в письме-
-уведомлении (этап 6) и билд не давали 404, но все обработчики — заглушки:
-`admin.products.index`/`admin.requests.index`/`admin.requests.show`
-рендерят `pages.stub`, `admin.attachments.download`/
-`admin.products.image.upload` возвращают `501 Not Implemented`. Логика
-sort_order при создании/редактировании товара (пункт, отмеченный ещё в
-батче 1) — не реализована.
+Товары: полный CRUD (`Admin\ProductController` + `ProductAdminService`),
+валидация slug/RU-названия 1:1 с исходником, переводы на 4 локали, `price`/
+`stock_quantity` подтверждённо не попадают в публичные ответы (тест
+`ProductAdminTest::test_catalog_service_never_includes_price_or_stock_quantity`
++ `test_price_and_stock_never_appear_on_the_public_product_page`).
+`sort_order` при создании — `MAX(sort_order)` в пределах секции (или
+категории, если секция не указана) `+ 1`; ручной реордеринг не реализован
+(явно вне обязательного минимума по брифу). Форма товара — полностраничная
+(не модалка, как в исходнике): 4 локали показаны стопкой секций, а не
+табами, чтобы не требовать JS для доступа к полям; `description`/`specs`/
+`applications` — textarea по строке на пункт вместо динамических полей
+строк (тот же формат хранения — массив строк).
+
+Загрузка изображений (`POST /api/admin/products/image`): проверка типа,
+размера (8 МБ), magic bytes (переиспользован `FileSignatureVerifier` из
+этапа 6), публичное хранилище (`PublicProductImageStorage`, диск `public`,
+`storage:link` нужен — см. `DEPLOY.md`), санитизация slug. Сознательно
+отдельный сервис от приватных вложений этапа 6 (разные лимиты/диски/типы).
+
+Заявки: список с фильтром `?status=`, карточка с авто-переходом
+`new → read`, технические поля в каноническом порядке (тот же список
+констант, что и в письме этапа 6), удаление с очисткой файлов вложений с
+диска (путь читается до удаления строки — каскад в БД не трогает диск).
+
+Скачивание вложений (`GET /api/admin/attachments/{id}`): `Storage::disk('local')->download()`
+— стриминг через `fpassthru()`, не читает файл в память; отдельные 404 для
+"нет записи в БД" и "есть запись, файла на диске нет"; `Content-Disposition`
+с `filename*=UTF-8''<percent-encoded>` для кириллицы (плюс ASCII-fallback,
+которого не было в исходнике — не поведенческое отличие, чистое
+надмножество, браузеры это давно поддерживают).
+
+Каскад секций (проверено, не реализовывалось — в исходнике админки для
+секций нет и здесь тоже нет): `products.section_id` — `ON DELETE SET NULL`,
+`section_translations.section_id` — `ON DELETE CASCADE` на саму секцию.
+Если секция когда-либо будет удалена (сейчас только через `tinker`/будущий
+функционал), её товары не удаляются, просто теряют `section_id` и попадают
+в резервную группировку по `category` — `sort_order` при этом не
+пересчитывается и может оказаться не строго последовательным внутри новой
+группы (не баг, просто не гарантирована плотная нумерация после такого
+события).
+
+25 новых тестов (см. раздел 3), полный прогон — 72 passed / 1 unrelated
+failed на SQLite, 72/72 на реальном MySQL (см. раздел 3).
 
 ### Этап 9 — детали (не начато)
 
@@ -122,83 +163,124 @@ Stage 9).
 
 `/contact` (POST, `contact.submit`) — не страница, обработчик формы; см. этап 6.
 
-### Админ-маршруты (5 GET-страниц + 2 POST-действия)
+### Админ-маршруты (11 GET-страниц + 6 POST/PUT/DELETE-действий)
 
 | Маршрут | Route name | Реализация |
 |---|---|---|
-| `GET /admin/login` | `admin.login` | Реальная (без стилизации) |
-| `GET /admin/` | `admin.dashboard` | Реальная, но без контента (только имя + logout) |
-| `GET /admin/products` | `admin.products.index` | Заглушка (`pages.stub`) |
-| `GET /admin/requests` | `admin.requests.index` | Заглушка (`pages.stub`) |
-| `GET /admin/requests/{id}` | `admin.requests.show` | Заглушка (`pages.stub`) |
+| `GET /admin/login` | `admin.login` | Реальная, оформлена |
+| `GET /admin/` | `admin.dashboard` | Реальная, статистика заявок/товаров |
+| `GET /admin/products` | `admin.products.index` | Реальная, список + поиск |
+| `GET /admin/products/create` | `admin.products.create` | Реальная |
+| `GET /admin/products/{slug}/edit` | `admin.products.edit` | Реальная |
+| `GET /admin/requests` | `admin.requests.index` | Реальная, список + фильтр по статусу |
+| `GET /admin/requests/{id}` | `admin.requests.show` | Реальная, авто-`read` |
 | `POST /admin/login` | `admin.login.attempt` | Реальная |
 | `POST /admin/logout` | `admin.logout` | Реальная |
+| `POST /admin/products` | `admin.products.store` | Реальная |
+| `PUT /admin/products/{slug}` | `admin.products.update` | Реальная |
+| `DELETE /admin/products/{slug}` | `admin.products.destroy` | Реальная |
+| `DELETE /admin/requests/{id}` | `admin.requests.destroy` | Реальная, чистит файлы вложений |
 
 ### API-маршруты (2)
 
 | Маршрут | Route name | Реализация |
 |---|---|---|
-| `GET /api/admin/attachments/{id}` | `admin.attachments.download` | Заглушка (JSON 501) |
-| `POST /api/admin/products/image` | `admin.products.image.upload` | Заглушка (JSON 501) |
+| `GET /api/admin/attachments/{id}` | `admin.attachments.download` | Реальная, стриминг, RFC5987-имя, раздельные 404 |
+| `POST /api/admin/products/image` | `admin.products.image.upload` | Реальная, тип/размер/сигнатура |
 
 ---
 
 ## 3. Что сделала вторая сессия
 
-Все перечисленные ниже файлы **присутствуют в рабочем дереве, но не
-закоммичены** (см. `git status` — раздел 4). Атрибуция по факту содержимого
-и хронологии `git status`, не по памяти о разговоре.
+Этапы 6 и 7 закоммичены (`93b45a3`, `aeb5982`). Этап 8 — в рабочем дереве,
+готов к коммиту (см. раздел 4 для решения про `public/build/`).
 
-**Файлы:**
-- `app/Http/Controllers/Admin/{AuthController,DashboardController,ProductController,RequestController,AttachmentController}.php`
+**Этапы 6–7 — файлы (закоммичены):**
+- `app/Http/Controllers/Admin/{AuthController,DashboardController}.php`
 - `app/Http/Middleware/{EnsureAdminAuthenticated,RedirectIfAdminAuthenticated}.php`
 - `app/Mail/NewContactSubmissionMail.php`
 - `app/Services/{ContactSubmissionHandler,FileSignatureVerifier,PrivateAttachmentStorage,RateLimiterService}.php`
-- `config/trustedproxy.php` (новый)
+- `config/trustedproxy.php`
 - `resources/views/admin/{login,dashboard}.blade.php`
 - `resources/views/emails/contact-submission.blade.php`
 - `tests/Feature/ContactFormTest.php`, `tests/Feature/Admin/AuthTest.php`,
   `tests/Unit/{FileSignatureVerifierTest,RateLimiterServiceTest,TrustedProxyIpTest}.php`
-- `DEPLOY.md` (новый)
-- Правки существующих файлов: `.env.example`, `app/Http/Controllers/ContactController.php`
-  (добавлен `submit()`), `app/Http/Controllers/Controller.php` (добавлен
-  `stubJson()`), `bootstrap/app.php` (алиасы middleware + обработка
-  `PostTooLargeException`), `config/auth.php` (guard `web`/`users` → `admin`/
-  `admin_users`, полностью переписан под единственный тип аккаунта),
-  `config/filesystems.php`, `config/mail.php`, `routes/web.php` (POST
-  `/contact`, весь блок `/admin` + `/api/admin`).
+- `DEPLOY.md`
+- Правки: `.env.example`, `app/Http/Controllers/ContactController.php`,
+  `app/Http/Controllers/Controller.php`, `bootstrap/app.php`,
+  `config/auth.php`, `config/filesystems.php`, `config/mail.php`,
+  `routes/web.php`.
 
-**Тесты — реально прогнаны (`php artisan test`), не только созданы:**
+**Этап 8 — файлы (в рабочем дереве, не закоммичены):**
+- `app/Http/Controllers/Admin/{ProductController,RequestController,AttachmentController}.php`
+  (заменили заглушки из этапа 7)
+- `app/Services/{ProductAdminService,PublicProductImageStorage}.php`
+- `resources/views/components/layouts/admin.blade.php`,
+  `resources/views/components/admin/stat-card.blade.php`
+- `resources/views/admin/products/{index,form,_image-upload-field}.blade.php`
+- `resources/views/admin/requests/{index,show}.blade.php`
+- `resources/views/admin/{login,dashboard}.blade.php` (переоформлены —
+  теперь используют общий layout вместо инлайн-HTML этапа 7)
+- `tests/Feature/Admin/{ProductAdminTest,RequestAdminTest}.php`
+- Правки: `app/Support/helpers.php` (добавлен `format_tenge()`),
+  `app/Services/ContactSubmissionHandler.php` (константы `PRIMARY_TECH_KEYS`/
+  `EXTRA_TECH_KEYS` стали `public` — переиспользуются в
+  `Admin\RequestController` для того же канонического порядка, что и в
+  письме этапа 6), `routes/web.php` (CRUD-маршруты вместо заглушек),
+  `tests/Feature/Admin/AuthTest.php` (убраны два теста, дублировавшие
+  заглушки этапа 7 — их роль полностью взяли на себя новые тесты
+  `ProductAdminTest`/`RequestAdminTest`).
+- `public/build/**` пересобран локально (`npm run build`, Windows-сторона —
+  Node здесь не в WSL, в отличие от PHP/MySQL) — см. раздел 4 про то, что
+  сборка сейчас отражает несохранённые изменения и первой сессии тоже.
+
+**Тесты этапа 8 — реально прогнаны, не только созданы:**
 
 ```
-PASS  Tests\Unit\FileSignatureVerifierTest
-PASS  Tests\Unit\RateLimiterServiceTest
-PASS  Tests\Unit\TrustedProxyIpTest
-PASS  Tests\Feature\Admin\AuthTest       (15 тестов)
-PASS  Tests\Feature\ContactFormTest      (15 тестов)
-FAIL  Tests\Feature\ExampleTest          — не относится к работе ни одной
-                                           из сессий, см. раздел 4
-Tests: 1 failed, 46 passed (139 assertions)
+PASS  Tests\Feature\Admin\ProductAdminTest   (16 тестов)
+PASS  Tests\Feature\Admin\RequestAdminTest   (10 тестов)
 ```
+
+Полный прогон всего проекта после этапа 8: 72 passed / 1 failed на SQLite
+(тот же нерелевантный `ExampleTest`, см. раздел 4), **72/72 на реальном
+MySQL** — разночтений SQLite/MySQL в этот раз не найдено (в отличие от
+этапа 6, где нашлось расхождение в порядке ключей JSON).
 
 **Композиция зависимостей не менялась** — `composer.json`/`composer.lock`
-не тронуты; вся функциональность реализована на стандартных возможностях
-Laravel (сессионный guard, `RateLimiter`-фасад, встроенный `Mail`).
+не тронуты ни на одном из этапов 6–8; вся функциональность реализована на
+стандартных возможностях Laravel.
 
-**Новых миграций вторая сессия не добавляла** — таблицы `admin_users`,
-`contact_submissions`, `submission_attachments` существовали с этапа 2
-(до начала параллельной работы), вторая сессия строила поверх уже
-закоммиченной схемы.
+**Новых миграций не добавлялось** — `sort_order`, `price`, `stock_quantity`
+на `products` уже существовали с этапа 5 (батч 1)/этапа 2, этап 8 строил
+поверх уже закоммиченной схемы.
 
 ---
 
 ## 4. Расхождения и риски
 
-**Главный риск — весь объём этапов 6 и 7 не закоммичен.** Он существует
-только в рабочей директории. Неосторожная `git checkout .`/`git reset --hard`/
-`git clean` уничтожит его без возможности восстановления. Рекомендация:
-закоммитить эту работу отдельно (от её автора или с явного согласия) как
-можно скорее — до того, как эта STATUS.md-инвентаризация устареет.
+**Прежний главный риск (этапы 6–7 не закоммичены) снят** — оба этапа
+закоммичены отдельными коммитами (`93b45a3`, `aeb5982`), пути перечислены
+явно, `git add -A` не использовался ни разу. Этап 8 на момент записи всё
+ещё в рабочем дереве — тот же риск актуален для него, пока не
+закоммичен следующим шагом.
+
+**`public/build/` — общий генерируемый артефакт, коммитить которого по
+отдельным сессиям не получится чисто.** Первая сессия (батч 4, about-us/
+faq/news/services/solutions) на момент этой записи тоже держит
+несохранённые изменения в `resources/css/js` + свои Blade-шаблоны, и её
+последняя пересборка `public/build/` тоже не закоммичена. Tailwind
+компилирует ОДИН файл со всеми классами, встреченными во ВСЕХ
+Blade-шаблонах разом — в отличие от PHP-файлов, "чья" часть CSS в
+скомпилированном бандле не определить и незачем: он всегда отражает
+полное текущее состояние дерева, а не чей-то один этап. Пересборка,
+сделанная для этапа 8 (`npm run build`, см. раздел 3), поэтому уже
+включает и незакоммиченные Blade/CSS-правки первой сессии — это ожидаемо
+и не ошибка, но если решите коммитить `public/build/` вместе с этапом 8,
+имейте в виду, что коммит формально "потащит" за собой стили ещё не
+закоммиченных публичных страниц батча 4. Альтернатива — оставить
+`public/build/` не закоммиченным до координированной финальной сборки
+(этап 10), собрав его тогда одним разом поверх уже смерженной работы
+обеих сессий.
 
 **Прямых конфликтов на уровне строк кода не обнаружено.** Батчи 1–3 (эта
 сессия) и работа второй сессии не редактировали одни и те же файлы
@@ -338,9 +420,9 @@ Domains → PHP Settings → выпадающий список версий на
 PS.kz, прежде чем начинать деплой (этап 10). Если доступен только 8.2 или
 ниже — блокирует весь проект, а не только этап 10.
 
-**Незакоммиченная работа второй сессии** (этапы 6–7) — не блокер для
-продолжения этапа 5, но риск потери, описанный в разделе 4. Требует
-координации: кто и когда коммитит.
+**Незакоммиченная работа этапа 8** — не блокер для продолжения этапа 5,
+но тот же класс риска, что раньше был у этапов 6–7 (раздел 4), до
+следующего коммита.
 
 **Переводы — не блокер** (см. раздел 5, по вашему указанию).
 
@@ -355,15 +437,15 @@ PS.kz, прежде чем начинать деплой (этап 10). Если
 Порядок — по зависимостям, не по приоритету. Вес — относительный, без дат.
 
 1. **Этап 5, батч 4** (about-us, about-us/{slug}, services, solutions,
-   faq, news) — средний объём, по образцу батча 3.
+   faq, news) — средний объём, по образцу батча 3. В рабочем дереве, не
+   закоммичено на момент этой записи.
 2. **Этап 5, батч 5** (contact: разметка + PumpDimensionsTable, без
    логики отправки) — средний объём; отдельная сложность — обе ветки
-   вывода ошибок из раздела 4 должны быть учтены в разметке.
-3. **Коммит этапов 6–7** — малый объём технически (уже написано и
-   протестировано), но требует координации между сессиями.
-4. **Этап 8** (админ-панель: CRUD товаров, список/просмотр заявок,
-   скачивание вложений, сортировка/sort_order при создании) — большой
-   объём, не начат.
+   вывода ошибок из раздела 4 должны быть учтены в разметке (контракт
+   `contactFormError` теперь несёт код, не текст — см. раздел про этап 6).
+3. **Коммит этапа 8** — малый объём технически (уже написано и
+   протестировано), плюс решение по `public/build/` из раздела 4.
+4. ~~Этап 8~~ — **готово**, см. раздел 1.
 5. **Этап 9** (SEO: sitemap, hreflang на все ~18 страниц × 4 локали,
    robots.txt, доработка `public/assets/`) — средне-большой объём, не
    начат.

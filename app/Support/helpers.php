@@ -35,3 +35,18 @@ if (! function_exists('locale_url')) {
         }
     }
 }
+
+if (! function_exists('format_tenge')) {
+    /**
+     * Admin-only display helper — ported from lib/utils.ts's formatTenge(),
+     * which uses Intl.NumberFormat('ru-KZ', {style:'currency', currency:'KZT'}).
+     * Manual formatting rather than PHP's intl extension/NumberFormatter:
+     * that extension isn't guaranteed to be enabled on the PS.kz tariff, and
+     * this is cosmetic-only (product price is never public, see
+     * Product::PUBLIC_VISIBLE) — not worth an extra runtime dependency for.
+     */
+    function format_tenge(int $amount): string
+    {
+        return number_format($amount, 0, '', ' ').' ₸';
+    }
+}
