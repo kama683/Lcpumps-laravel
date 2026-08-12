@@ -34,6 +34,10 @@ const PAGES = {
   control: '/products/control',
   water: '/products/water',
   productDetail: '/products/sls',
+  projects: '/projects',
+  projectDetail: '/project/bird-nest',
+  applications: '/applications',
+  waterWastewater: '/applications/water-wastewater',
 };
 
 const DEFAULT_LOCALES = [
@@ -43,7 +47,7 @@ const DEFAULT_LOCALES = [
   { code: 'zh', prefix: '/zh' },
 ];
 
-const DEFAULT_WIDTHS = [375, 900, 1440];
+const DEFAULT_WIDTHS = [375, 901, 1440];
 
 function findChrome() {
   if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
