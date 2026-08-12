@@ -3,15 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Services\ContactSubmissionHandler;
+use App\Support\Content;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
+    /**
+     * Whitelist for the ?contactFormError= query param — see submit()'s
+     * doc block. Must stay in sync with lang/*\/Contact.php's form.errors.*
+     * keys and bootstrap/app.php's PostTooLargeException handler.
+     */
+    private const array ERROR_CODES = [
+        'missingFields', 'invalidEmail', 'invalidFileType',
+        'fileTooLarge', 'totalSizeExceeded', 'rateLimited', 'unknown',
+    ];
+
     public function index(): View
     {
-        return $this->stub('contact.index');
+        $queryErrorCode = request()->query('contactFormError');
+        $errorMessage = session()->has('errors') && session('errors')->has('contact')
+            ? session('errors')->first('contact')
+            : (in_array($queryErrorCode, self::ERROR_CODES, true)
+                ? __('Contact.form.errors.'.$queryErrorCode)
+                : null);
+
+        return view('pages.contact.index', [
+            'metaTitle' => __('PageMetadata.contact.title'),
+            // Bug preserved as-is, matches source's getFaqItems().slice(0, 3)
+            // called with no locale arg — see KNOWN_DEFECTS.md #2.
+            'faqItems' => array_slice(Content::faqItems(), 0, 3),
+            'successMessage' => session('contact_success') === true,
+            'errorMessage' => $errorMessage,
+            'techOpen' => old('mode') === 'technical',
+            'breadcrumb' => [
+                ['label' => __('Common.home'), 'route' => 'home'],
+                ['label' => __('Nav.contacts')],
+            ],
+        ]);
     }
 
     /**

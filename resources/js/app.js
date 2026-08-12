@@ -11,6 +11,7 @@ import { initCatalogSearch } from './catalog-search';
 import { initTilt } from './tilt';
 import { initProductDownload } from './product-download';
 import { initAccordion } from './accordion';
+import { initContactForm } from './contact-form';
 
 function boot() {
     initHeader();
@@ -26,6 +27,7 @@ function boot() {
     initTilt();
     initProductDownload();
     initAccordion();
+    initContactForm();
 }
 
 if (document.readyState === 'loading') {

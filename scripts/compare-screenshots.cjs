@@ -45,6 +45,7 @@ const PAGES = {
   solutions: '/solutions',
   faq: '/faq',
   news: '/news',
+  contact: '/contact',
 };
 
 const DEFAULT_LOCALES = [

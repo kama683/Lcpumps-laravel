@@ -96,5 +96,42 @@
         @case('headphones')
             <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" />
             @break
+        @case('clock')
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
+            @break
+        @case('settings-2')
+            <path d="M14 17H5" />
+            <path d="M19 7h-9" />
+            <circle cx="17" cy="17" r="3" />
+            <circle cx="7" cy="7" r="3" />
+            @break
+        @case('file-up')
+            <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
+            <path d="M14 2v5a1 1 0 0 0 1 1h5" />
+            <path d="M12 12v6" />
+            <path d="m15 15-3-3-3 3" />
+            @break
+        @case('check-circle-2')
+            <circle cx="12" cy="12" r="10" />
+            <path d="m9 12 2 2 4-4" />
+            @break
+        @case('alert-circle')
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" x2="12" y1="8" y2="12" />
+            <line x1="12" x2="12.01" y1="16" y2="16" />
+            @break
+        @case('table-2')
+            <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18" />
+            @break
+        @case('waypoints')
+            <path d="m10.586 5.414-5.172 5.172" />
+            <path d="m18.586 13.414-5.172 5.172" />
+            <path d="M6 12h12" />
+            <circle cx="12" cy="20" r="2" />
+            <circle cx="12" cy="4" r="2" />
+            <circle cx="20" cy="12" r="2" />
+            <circle cx="4" cy="12" r="2" />
+            @break
     @endswitch
 </svg>
