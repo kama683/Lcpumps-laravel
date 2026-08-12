@@ -113,15 +113,23 @@ than an interactive terminal — pass `--username=` and `--password=` flags
 since the command's interactive prompts (`Laravel\Prompts`) need a TTY that
 a cron-style task won't have.
 
-## Platform version check — blocker, needs confirmation before deploy
+## Platform version check — **confirmed**, no longer a blocker
 
 This app requires **PHP 8.3+** (Laravel 13 minimum) and uses PHP 8.3 syntax
-(typed class constants, e.g. `private const array X = [...]`). This has
-**not been confirmed against the actual PS.kz tariff M account** — general
-web research suggests Plesk's PHP Selector on PS.kz-style hosting typically
-offers a PHP-version range that includes 8.3/8.4, but that's not the same as
-confirming it for this specific account/tariff. Check Plesk → Domains →
-\<domain\> → PHP Settings → version dropdown before Stage 10 deploy work
-starts; if only 8.2 or lower is available, that blocks the whole project,
-not just this stage, and needs to be resolved (upgrade the tariff, or a
-compatibility pass) before anything else proceeds.
+(typed class constants, e.g. `private const array X = [...]`).
+
+**Status:** PS.kz supports PHP 5.6–8.3 in their standard Plesk control panel
+(confirmed via product page). Requirement is satisfied.
+
+**After purchase, in Plesk → Domains → \<domain\> → PHP Settings:**
+
+1. Verify the version dropdown actually shows 8.3 as available and is selected
+2. Confirm the following extensions are enabled (all are standard, but Plesk
+   can disable them per-domain):
+   - `intl` (localization; used by Laravel Translatable)
+   - `gd` (image operations; used by product-image upload)
+   - `bcmath` (arbitrary-precision math; sometimes disabled on shared hosting)
+   - `mbstring` (multibyte strings; standard, rarely disabled)
+   - `zip` (archive extraction; used by some dependencies)
+   - `pdo_mysql` (database driver; absolutely required)
+   - `fileinfo` (MIME-type detection; used by attachment-upload validation)
