@@ -79,6 +79,13 @@ but Russian anywhere in the repo:
     (e.g. `"Какие категории продукции выпускает LCPumps?"`), not pulled
     from `messages/*.json` or any locale table. No kk/en/zh version exists
     anywhere in the codebase.
+  - The **answer** to the 1st FAQ question is *also* a hardcoded Russian
+    literal (`data/content.ts` line ~210: `"Насосы, трубопроводная
+    арматура, электрические шкафы управления и оборудование для
+    водоснабжения."`) — unlike the other 3 answers, which pull from
+    `company[locale]` (already translated). Easy to miss because it looks
+    identical in shape to the other three `answer:` lines; confirmed by
+    reading the function body, not assumed.
   - 3 of the 4 Applications **card titles** in `getApplicationsCards()`
     ("Строительство зданий", "Промышленные и горнодобывающие предприятия",
     "Проекты") are likewise Russian literals with no existing translation.
@@ -89,19 +96,32 @@ but Russian anywhere in the repo:
     without waiting on new translation copy.
 
 **Bottom line for the client:** fixing the `<title>` tags and the paragraph/
-answer *bodies* is a code-only fix (translations already exist). Fixing the
-FAQ question text and 3 of the 4 Applications card titles additionally
-requires new translated copy for kk/en/zh that doesn't exist yet in either
-repo — needs to be sourced before that part of the fix can ship.
+answer *bodies* pulled from `company[locale]` is a code-only fix
+(translations already exist). Fixing the FAQ question text, the 1st FAQ
+answer, and 3 of the 4 Applications card titles additionally requires new
+translated copy for kk/en/zh that doesn't exist yet in either repo — 8
+distinct strings × 3 languages = **24 translations** to write (not 21 —
+recount after finding the 1st-FAQ-answer case above). You've said you'll
+write these yourselves rather than wait on the client, so this list is no
+longer a blocker, just a to-do:
+  1. Applications card title: "Строительство зданий"
+  2. Applications card title: "Промышленные и горнодобывающие предприятия"
+  3. Applications card title: "Проекты"
+  4. FAQ question: "Какие категории продукции выпускает LCPumps?"
+  5. FAQ answer (question 1 only): "Насосы, трубопроводная арматура, электрические шкафы управления и оборудование для водоснабжения."
+  6. FAQ question: "В каких отраслях применяется продукция?"
+  7. FAQ question: "Какие сертификаты имеет компания?"
+  8. FAQ question: "Есть ли сервисная сеть?"
 
 **Status:** preserved as-is in the Laravel port — `ApplicationsController`
-(Stage 5 batch 3), `ServicesController`/`FaqController` (batch 4) all call
-the equivalent PHP helpers (`App\Support\Content::companyParagraphs()`/
-`faqItems()`) without a locale argument, matching the source bug exactly.
-`AboutUsController::index()` hardcodes the Russian `<title>` the same way.
-`ContactController`'s GET page (batch 5, not built yet) will follow the
-same precedent when it's built.
-**Fix:** deferred to a coordinated commit across both repos. Translation
-copy is no longer an external blocker — being written in-house (see
-STATUS.md §5/§6) — but the fix itself still waits for full Stage 5
-sign-off, same as the other preserved-as-is defects.
+(Stage 5 batch 3), `ServicesController`/`FaqController` (batch 4),
+`ContactController`'s GET page (batch 5, mini-FAQ only — its own `<title>`
+is real/localized, not part of this defect) all call the equivalent PHP
+helpers (`App\Support\Content::companyParagraphs()`/`faqItems()`) without
+a locale argument, matching the source bug exactly. `AboutUsController::index()`
+hardcodes the Russian `<title>` the same way. All of Stage 5 is now built
+and committed, so every affected page listed in the tables above is live
+in the port exactly as documented here.
+**Fix:** deferred to a coordinated commit across both repos, gated only on
+the 24 translations above being written (in progress, in-house) — no
+other blocker remains for this fix once that copy exists.

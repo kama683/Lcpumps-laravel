@@ -22,6 +22,11 @@
 /storage/pail
 /storage/app/screenshot-compare
 /vendor
+# One-off root-level debug scratch (e.g. sitemap-debug.xml, check_sitemap.php)
+# — repeatedly reappears from manual `/sitemap.xml` checks; ignore rather than
+# keep deleting it out from under whoever's running it.
+/check_*.php
+/*-debug.xml
 _ide_helper.php
 Homestead.json
 Homestead.yaml
