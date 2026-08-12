@@ -113,23 +113,29 @@ than an interactive terminal — pass `--username=` and `--password=` flags
 since the command's interactive prompts (`Laravel\Prompts`) need a TTY that
 a cron-style task won't have.
 
-## Platform version check — **confirmed**, no longer a blocker
+## Platform version check — still a blocker, not confirmed for this account
 
 This app requires **PHP 8.3+** (Laravel 13 minimum) and uses PHP 8.3 syntax
 (typed class constants, e.g. `private const array X = [...]`).
 
-**Status:** PS.kz supports PHP 5.6–8.3 in their standard Plesk control panel
-(confirmed via product page). Requirement is satisfied.
+**What's actually known vs. not:** PS.kz's general product page advertises
+PHP 5.6–8.3 support in their standard Plesk control panel — that's a
+statement about their hosting line in general, not a confirmation for this
+specific tariff/account. A 2026-08-13 pass through this file briefly
+mislabeled this as "confirmed" on the strength of that product-page read
+alone; corrected back, since it isn't the same thing as checking the
+actual Plesk panel on the actual purchased account, which is what this
+section originally (correctly) called for. **Still needs**: Plesk →
+Domains → \<domain\> → PHP Settings → version dropdown, checked on the
+real account, before Stage 10 deploy work starts. If only 8.2 or lower is
+available there, that blocks the whole project, not just this stage.
 
-**After purchase, in Plesk → Domains → \<domain\> → PHP Settings:**
-
-1. Verify the version dropdown actually shows 8.3 as available and is selected
-2. Confirm the following extensions are enabled (all are standard, but Plesk
-   can disable them per-domain):
-   - `intl` (localization; used by Laravel Translatable)
-   - `gd` (image operations; used by product-image upload)
-   - `bcmath` (arbitrary-precision math; sometimes disabled on shared hosting)
-   - `mbstring` (multibyte strings; standard, rarely disabled)
-   - `zip` (archive extraction; used by some dependencies)
-   - `pdo_mysql` (database driver; absolutely required)
-   - `fileinfo` (MIME-type detection; used by attachment-upload validation)
+**Once in Plesk, also confirm these extensions are enabled** (all are
+standard, but Plesk can disable them per-domain):
+- `intl` (localization; used by Laravel Translatable)
+- `gd` (image operations; used by product-image upload)
+- `bcmath` (arbitrary-precision math; sometimes disabled on shared hosting)
+- `mbstring` (multibyte strings; standard, rarely disabled)
+- `zip` (archive extraction; used by some dependencies)
+- `pdo_mysql` (database driver; absolutely required)
+- `fileinfo` (MIME-type detection; used by attachment-upload validation)

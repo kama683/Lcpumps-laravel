@@ -48,12 +48,13 @@ class AboutUsController extends Controller
         $company = Content::companyParagraphs($locale);
 
         return view('pages.about-us.index', [
-            // Real porting note: the source's <title> for this page is a
-            // static `export const metadata` ("О компании") — same
-            // never-localizes bug class as KNOWN_DEFECTS.md #2, but this
-            // one has no locale-aware body-content counterpart to fix
-            // later since the page content itself is correctly localized.
-            'metaTitle' => 'О компании',
+            // Was KNOWN_DEFECTS.md #2's <title>-only case: the source used a
+            // static `export const metadata` ("О компании") instead of
+            // generateMetadata(), so the <title> never localized even though
+            // the page content itself always did. Fixed — reuses the
+            // existing Nav.aboutUs key (same RU text, already translated to
+            // kk/en/zh), no new translation copy needed.
+            'metaTitle' => __('Nav.aboutUs'),
             'cert' => $company[6] ?? '',
             'service' => $company[5] ?? '',
             'clients' => $company[9] ?? '',

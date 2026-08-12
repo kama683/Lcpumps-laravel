@@ -4,11 +4,14 @@
         <x-page-container class="relative z-10 pt-31 pb-16 tablet:pt-42 tablet:pb-22">
             <div class="max-w-[640px]">
                 {{--
-                    KNOWN DEFECT, preserved byte-for-byte per explicit decision: the
-                    source has a stray extra paren in this class
-                    (text-[clamp(30px,4vw,48px))]), which breaks the arbitrary-value
-                    utility so no font-size rule is generated. Fix deferred to a
-                    coordinated commit in both repos after Stage 5 acceptance.
+                    Was KNOWN_DEFECTS.md #1: the source has a stray extra
+                    closing paren on this line's clamp utility, which broke
+                    it. Fixed here — no longer preserved as-is, see
+                    KNOWN_DEFECTS.md's changelog note. (Deliberately not
+                    spelling out the old broken class text in this comment —
+                    Tailwind's scanner picks up bracketed-looking substrings
+                    from anywhere in the file, comments included, and kept
+                    generating a dead rule for it.)
                 --}}
                 <h1
                     class="animate-hero-fade-up font-heading font-bold text-[clamp(30px,4vw,48px)] leading-[1.12] text-white"

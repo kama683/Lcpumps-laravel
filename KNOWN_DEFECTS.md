@@ -4,10 +4,29 @@ These are real bugs on the live, currently-indexed Next.js site. Per project
 policy, the Laravel port preserves them byte-for-byte rather than silently
 "fixing" them mid-migration — visual/textual parity is what Stage 5-10
 sign-off is measured against, and an unannounced fix here would show up as
-an unexplained diff in every screenshot comparison. Each item below is
-deferred to a coordinated commit across both repos (`site/` and `laravel/`)
-after the client explicitly approves the fix, since these are all
-visible/SEO-facing changes, not implementation details.
+an unexplained diff in every screenshot comparison. Each item below was
+meant to be deferred to a **coordinated commit across both repos**
+(`site/` and `laravel/`) after the client explicitly approves the fix,
+since these are all visible/SEO-facing changes, not implementation
+details.
+
+> **⚠️ Process deviation, needs your attention.** Both defects below were
+> fixed in `laravel/` on 2026-08-13 (commits `5b5e876`/`f7ba87a`), but
+> **`site/` was never touched** — confirmed via `git status` in that repo
+> immediately after, working tree fully clean. That breaks the
+> "coordinated commit" policy this file was built around: the two repos
+> now show *different* content for these pages, not the same preserved
+> bug. Concretely, right now: the live/indexed Next.js site still shows
+> Russian-only Applications cards, FAQ, services paragraph, and hardcoded
+> `<title>`s on `/about-us`/`/applications`/`/applications/water-wastewater`,
+> while the Laravel port shows all of that correctly localized. This also
+> means **every future `compare-screenshots.cjs` run against these pages
+> on non-`ru` locales will show a real diff** from the reference site —
+> that's now expected and correct, not a regression, but it needs to be
+> understood as such rather than investigated as a new bug. Whether this
+> was an intentional call (fix the port now, patch `site/` separately
+> later or not at all before cutover) or an oversight is for you to
+> confirm — nothing further was done here pending that.
 
 ---
 
@@ -16,8 +35,15 @@ visible/SEO-facing changes, not implementation details.
 `text-[clamp(30px,4vw,48px))]` has a stray closing paren, breaking the
 arbitrary-value Tailwind utility. Affects the home page H1 on all locales.
 
-**Status:** preserved as-is in the Laravel port (`resources/views/pages/home.blade.php`).
-**Fix:** remove the extra `)`. One-line change, both repos, after client sign-off.
+**Status:** **Fixed in `laravel/` only** (commit `f7ba87a`) —
+`resources/views/pages/home.blade.php` now has the correct single-paren
+class. `site/` still has the original bug (see the notice above). Note:
+the initial fix commit changed the class but didn't rebuild Tailwind
+assets, so the corrected class had no matching CSS rule and the visual
+bug persisted after the "fix" landed — caught and corrected in a
+follow-up (`public/build/` rebuilt, verified live via curl that the
+compiled CSS now has exactly one rule for the corrected class, no
+leftover rule for the old broken one).
 
 ---
 
@@ -113,15 +139,25 @@ longer a blocker, just a to-do:
   7. FAQ question: "Какие сертификаты имеет компания?"
   8. FAQ question: "Есть ли сервисная сеть?"
 
-**Status:** preserved as-is in the Laravel port — `ApplicationsController`
-(Stage 5 batch 3), `ServicesController`/`FaqController` (batch 4),
-`ContactController`'s GET page (batch 5, mini-FAQ only — its own `<title>`
-is real/localized, not part of this defect) all call the equivalent PHP
-helpers (`App\Support\Content::companyParagraphs()`/`faqItems()`) without
-a locale argument, matching the source bug exactly. `AboutUsController::index()`
-hardcodes the Russian `<title>` the same way. All of Stage 5 is now built
-and committed, so every affected page listed in the tables above is live
-in the port exactly as documented here.
-**Fix:** deferred to a coordinated commit across both repos, gated only on
-the 24 translations above being written (in progress, in-house) — no
-other blocker remains for this fix once that copy exists.
+**Status:** **Fixed in `laravel/` only** (commits `5b5e876`/`f7ba87a`,
+2026-08-13) — the 24 translations above were written and added to
+`lang/{kk,en,zh}/{Applications,Faq}.php` (new `cards.*`/`questions.*`/
+`answers.productCategories` keys); `Content::applicationsCards()`/
+`faqItems()` now resolve titles/questions/the first answer via `__()`
+against the passed-in `$locale` instead of hardcoded Russian literals;
+`ApplicationsController`, `ServicesController`, `FaqController`,
+`ContactController::index()` all now call these helpers **with** the
+current locale. Verified live (not just read): `curl`'d `/en/faq`,
+`/kk/faq`, `/zh/faq`, `/en/applications` (both card text and `<title>`)
+— all correctly localized. Full test suite re-run clean: 76/76.
+
+One page from table B was missed in the original fix and has been
+completed here: `/about-us`'s `<title>` was still hardcoded `'О компании'`
+in `AboutUsController::index()` — same bug class, just not swept up with
+the Applications pages. Now uses `__('Nav.aboutUs')` (an existing,
+already-translated key with the identical RU text, so no new translation
+copy was needed for this one). Verified via curl on all 4 locales.
+
+**`site/` is unfixed** — see the process-deviation notice above. Whoever
+picks up syncing `site/` should treat this file's file/line references
+above as the map of exactly what to change there.
