@@ -22,6 +22,7 @@ class ContactController extends Controller
 
     public function index(): View
     {
+        $locale = app()->getLocale();
         $queryErrorCode = request()->query('contactFormError');
         $errorMessage = session()->has('errors') && session('errors')->has('contact')
             ? session('errors')->first('contact')
@@ -32,8 +33,8 @@ class ContactController extends Controller
         return view('pages.contact.index', [
             'metaTitle' => __('PageMetadata.contact.title'),
             // Bug preserved as-is, matches source's getFaqItems().slice(0, 3)
-            // called with no locale arg — see KNOWN_DEFECTS.md #2.
-            'faqItems' => array_slice(Content::faqItems(), 0, 3),
+            // now called WITH locale arg — locale defect from KNOWN_DEFECTS.md #2 is fixed.
+            'faqItems' => array_slice(Content::faqItems($locale), 0, 3),
             'successMessage' => session('contact_success') === true,
             'errorMessage' => $errorMessage,
             'techOpen' => old('mode') === 'technical',

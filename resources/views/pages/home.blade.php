@@ -11,7 +11,7 @@
                     coordinated commit in both repos after Stage 5 acceptance.
                 --}}
                 <h1
-                    class="animate-hero-fade-up font-heading font-bold text-[clamp(30px,4vw,48px))] leading-[1.12] text-white"
+                    class="animate-hero-fade-up font-heading font-bold text-[clamp(30px,4vw,48px)] leading-[1.12] text-white"
                     style="animation-delay: 80ms"
                 >
                     {{ __('Home.heroPrefix') }}

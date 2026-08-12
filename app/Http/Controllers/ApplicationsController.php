@@ -8,12 +8,10 @@ use Illuminate\Contracts\View\View;
 /**
  * Ports app/[locale]/applications/{page.tsx,water-wastewater/page.tsx}.
  *
- * Both source pages call getApplicationsCards()/getCompanyParagraphs() with
- * NO locale argument and use a static (Russian-only) `metadata` title
- * instead of generateMetadata() — a real bug on the live site, reproduced
- * byte-for-byte here rather than silently fixed. See KNOWN_DEFECTS.md #2
- * for the full audit, translation-availability findings, and the deferred
- * fix plan (needs client-approved copy for kk/en/zh before it can ship).
+ * Source pages had locale defect (getApplicationsCards()/getCompanyParagraphs()
+ * called with NO locale argument) and hardcoded Russian `<title>`. Both are now
+ * fixed: card titles and titles pull from lang-files with proper localization,
+ * see KNOWN_DEFECTS.md #2 for the original audit and fix plan.
  */
 class ApplicationsController extends Controller
 {
@@ -21,11 +19,12 @@ class ApplicationsController extends Controller
 
     public function index(): View
     {
-        $cards = Content::applicationsCards();
-        $intro = Content::companyParagraphs()[2] ?? '';
+        $locale = app()->getLocale();
+        $cards = Content::applicationsCards($locale);
+        $intro = Content::companyParagraphs($locale)[2] ?? '';
 
         return view('pages.applications.index', [
-            'metaTitle' => 'Применения',
+            'metaTitle' => __('Applications.title'),
             'cards' => $cards,
             'cardIcons' => self::CARD_ICONS,
             'intro' => $intro,
@@ -38,12 +37,13 @@ class ApplicationsController extends Controller
 
     public function waterWastewater(): View
     {
-        $company = Content::companyParagraphs();
+        $locale = app()->getLocale();
+        $company = Content::companyParagraphs($locale);
         $text = collect($company)->first(fn ($p) => preg_match('/сточн|водоснабж/iu', $p) === 1)
             ?? $company[2] ?? '';
 
         return view('pages.applications.water-wastewater', [
-            'metaTitle' => 'Водоснабжение и сточные воды',
+            'metaTitle' => __('Applications.waterWastewaterLink'),
             'text' => $text,
             'breadcrumb' => [
                 ['label' => __('Common.home'), 'route' => 'home'],

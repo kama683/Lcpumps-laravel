@@ -61,10 +61,8 @@ class Content
     }
 
     /**
-     * Ports data/content.ts's getApplicationsCards(). Card titles are
-     * literal Russian strings in the source (not translated anywhere, see
-     * KNOWN_DEFECTS.md #2) except the first, which happens to duplicate the
-     * already-translated Applications.title lang key.
+     * Ports data/content.ts's getApplicationsCards(). Card titles now pull
+     * from lang-files instead of hardcoded Russian strings, fixing KNOWN_DEFECTS.md #2.
      *
      * @return array<int, array{title: string, text: string}>
      */
@@ -75,18 +73,18 @@ class Content
         $industrialIdx = self::findCompanyIndex('/промышленн/iu');
 
         return [
-            ['title' => 'Отрасли применения', 'text' => $company[2] ?? ''],
-            ['title' => 'Строительство зданий', 'text' => ($buildingIdx >= 0 ? $company[$buildingIdx] : $company[2]) ?? ''],
-            ['title' => 'Промышленные и горнодобывающие предприятия', 'text' => ($industrialIdx >= 0 ? $company[$industrialIdx] : $company[2]) ?? ''],
-            ['title' => 'Проекты', 'text' => $company[7] ?? ''],
+            ['title' => __('Applications.cards.industriesOfApplication', locale: $locale), 'text' => $company[2] ?? ''],
+            ['title' => __('Applications.cards.buildingConstruction', locale: $locale), 'text' => ($buildingIdx >= 0 ? $company[$buildingIdx] : $company[2]) ?? ''],
+            ['title' => __('Applications.cards.industrialAndMining', locale: $locale), 'text' => ($industrialIdx >= 0 ? $company[$industrialIdx] : $company[2]) ?? ''],
+            ['title' => __('Applications.cards.projects', locale: $locale), 'text' => $company[7] ?? ''],
         ];
     }
 
     /**
-     * Ports data/content.ts's getFaqItems(). Question text is literal
-     * Russian, same as applicationsCards()'s titles (see KNOWN_DEFECTS.md
-     * #2) — only the answers pull from the locale-aware company paragraphs.
-     * Filters out any item whose answer resolved empty, same as the source.
+     * Ports data/content.ts's getFaqItems(). Question and first-answer text now pull
+     * from lang-files instead of hardcoded Russian strings, fixing KNOWN_DEFECTS.md #2.
+     * Only the answer paragraphs (except question 1) still pull from the locale-aware
+     * company paragraphs. Filters out any item whose answer resolved empty, same as the source.
      *
      * @return array<int, array{question: string, answer: string}>
      */
@@ -97,10 +95,10 @@ class Content
         $serviceIdx = self::findCompanyIndex('/филиалов/iu');
 
         $items = [
-            ['question' => 'Какие категории продукции выпускает LCPumps?', 'answer' => 'Насосы, трубопроводная арматура, электрические шкафы управления и оборудование для водоснабжения.'],
-            ['question' => 'В каких отраслях применяется продукция?', 'answer' => $company[2] ?? ''],
-            ['question' => 'Какие сертификаты имеет компания?', 'answer' => $certIdx >= 0 ? ($company[$certIdx] ?? '') : ''],
-            ['question' => 'Есть ли сервисная сеть?', 'answer' => $serviceIdx >= 0 ? ($company[$serviceIdx] ?? '') : ''],
+            ['question' => __('Faq.questions.productCategories', locale: $locale), 'answer' => __('Faq.answers.productCategories', locale: $locale)],
+            ['question' => __('Faq.questions.industries', locale: $locale), 'answer' => $company[2] ?? ''],
+            ['question' => __('Faq.questions.certifications', locale: $locale), 'answer' => $certIdx >= 0 ? ($company[$certIdx] ?? '') : ''],
+            ['question' => __('Faq.questions.serviceNetwork', locale: $locale), 'answer' => $serviceIdx >= 0 ? ($company[$serviceIdx] ?? '') : ''],
         ];
 
         return array_values(array_filter($items, fn ($item) => $item['answer'] !== ''));
