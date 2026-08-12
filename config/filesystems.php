@@ -64,6 +64,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Contact-Form Attachment Uploads
+    |--------------------------------------------------------------------------
+    |
+    | Subdirectory (on the "local" disk, i.e. storage/app/private/...) where
+    | contact-form attachments are stored. Private and outside the document
+    | root, unlike UPLOADS_PUBLIC_DIR which lives on the "public" disk.
+    |
+    */
+
+    'uploads_private_dir' => env('UPLOADS_PRIVATE_DIR', 'private-uploads'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Symbolic Links
     |--------------------------------------------------------------------------
     |

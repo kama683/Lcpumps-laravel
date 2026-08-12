@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\Admin\AttachmentController as AdminAttachmentController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\RequestController as AdminRequestController;
 use App\Http\Controllers\ApplicationsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FaqController;
@@ -29,6 +34,7 @@ LocalizedRoutes::register(function (): void {
         ->name('applications.water-wastewater');
 
     Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+    Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
     Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 
@@ -65,5 +71,35 @@ Route::get('/ru', fn () => redirect()->to($withQueryString('/'), 307));
 Route::get('/ru/{path}', fn (string $path) => redirect()->to($withQueryString('/'.$path), 307))
     ->where('path', '.*');
 
-// Admin routes (unlocalized, Russian-only UI) are registered starting
-// Stage 7, once the auth guard/middleware they depend on exists.
+// Admin routes: unlocalized (Russian-only UI), never wrapped in
+// LocalizedRoutes::register() — /admin paths are excluded from
+// i18n/SetLocale entirely, matching proxy.ts's early-return for /admin*
+// before next-intl's middleware ever runs.
+Route::prefix('admin')->name('admin.')->group(function (): void {
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])
+        ->middleware('admin.guest')->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])
+        ->middleware('admin.guest')->name('login.attempt');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])
+        ->middleware('admin.auth')->name('logout');
+
+    Route::middleware('admin.auth')->group(function (): void {
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+        // Stage 8 stubs, registered now (already behind admin.auth) so
+        // links to them — e.g. the Stage 6 notification email's
+        // admin.requests.show — resolve instead of 404ing.
+        Route::get('/products', [AdminProductController::class, 'index'])->name('products.index');
+        Route::get('/requests', [AdminRequestController::class, 'index'])->name('requests.index');
+        Route::get('/requests/{id}', [AdminRequestController::class, 'show'])->name('requests.show');
+    });
+});
+
+Route::prefix('api/admin')->middleware('admin.auth')->name('admin.')->group(function (): void {
+    // Stage 8 stubs — same-origin JSON endpoints for the admin pages above,
+    // authenticated via the same session cookie (not a separate token API).
+    Route::get('/attachments/{id}', [AdminAttachmentController::class, 'download'])
+        ->name('attachments.download');
+    Route::post('/products/image', [AdminProductController::class, 'uploadImage'])
+        ->name('products.image.upload');
+});

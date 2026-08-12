@@ -115,4 +115,17 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Contact-Form Notification Recipient
+    |--------------------------------------------------------------------------
+    |
+    | Stage 6 addition, not present in the source (which only wrote
+    | submissions to the DB). Sending failures must never block a
+    | submission from being saved — see ContactSubmissionHandler.
+    |
+    */
+
+    'contact_notify_to' => env('CONTACT_NOTIFY_TO'),
+
 ];

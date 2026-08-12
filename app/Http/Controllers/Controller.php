@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 abstract class Controller
@@ -30,5 +31,17 @@ abstract class Controller
     protected function stub(string $routeName, array $params = []): View
     {
         return view('pages.stub', ['routeName' => $routeName, 'params' => $params]);
+    }
+
+    /**
+     * Stage 7 placeholder for the Stage 8 admin JSON endpoints — registered
+     * (behind admin.auth) now so the Stage 6 notification email's
+     * admin.requests.show link, and admin.attachments.download, resolve to
+     * something instead of 404ing. 501 Not Implemented, not 200, so it
+     * can't be mistaken for a working response.
+     */
+    protected function stubJson(string $routeName, array $params = []): JsonResponse
+    {
+        return response()->json(['stub' => $routeName, 'params' => $params], 501);
     }
 }
