@@ -324,3 +324,19 @@ html.js [data-fade-img-skeleton].is-loaded {
    itself is the literal Tailwind class from the source, kept verbatim in
    resources/views/components/product-image.blade.php. Default is 1 (no zoom)
    whether or not the custom property has been set yet. */
+
+/* AccordionItem — the source's version is 100% client-rendered (useState),
+   so it doesn't work at all without JS. Native <details>/<summary> gives
+   this port a free, always-correct baseline (open/close snaps instantly,
+   no animation); resources/js/accordion.js layers the smooth
+   grid-template-rows transition on top, same upgrade-over-source pattern
+   already used for the language switcher. Not html.js-scoped like the
+   rules above — this isn't about hiding content, the row-height values
+   just need to be correct with or without JS. */
+[data-accordion-panel] {
+    grid-template-rows: 0fr;
+}
+
+details[open] > [data-accordion-panel] {
+    grid-template-rows: 1fr;
+}

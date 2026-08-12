@@ -83,7 +83,7 @@
                 </div>
             </aside>
 
-            <div data-catalog-panels data-panel-ids="{{ json_encode(array_column($panels, 'id')) }}" data-default-panel="{{ $defaultPanelId }}">
+            <div data-catalog-panels data-panel-ids="{{ json_encode(array_column($panels, 'id')) }}" data-default-panel="{{ $defaultPanelId }}" data-default-title="{{ $title }}">
                 @foreach ($panels as $panel)
                     <div
                         data-catalog-panel="{{ $panel['id'] }}"

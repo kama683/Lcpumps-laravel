@@ -47,6 +47,19 @@ class Content
         return -1;
     }
 
+    /** Plural version of findCompanyIndex — returns every matching index, not just the first. */
+    private static function findCompanyIndices(string $pattern): array
+    {
+        $indices = [];
+        foreach (self::companyParagraphs('ru') as $i => $paragraph) {
+            if (preg_match($pattern, $paragraph) === 1) {
+                $indices[] = $i;
+            }
+        }
+
+        return $indices;
+    }
+
     /**
      * Ports data/content.ts's getApplicationsCards(). Card titles are
      * literal Russian strings in the source (not translated anywhere, see
@@ -68,4 +81,165 @@ class Content
             ['title' => 'Проекты', 'text' => $company[7] ?? ''],
         ];
     }
+
+    /**
+     * Ports data/content.ts's getFaqItems(). Question text is literal
+     * Russian, same as applicationsCards()'s titles (see KNOWN_DEFECTS.md
+     * #2) — only the answers pull from the locale-aware company paragraphs.
+     * Filters out any item whose answer resolved empty, same as the source.
+     *
+     * @return array<int, array{question: string, answer: string}>
+     */
+    public static function faqItems(string $locale = 'ru'): array
+    {
+        $company = self::companyParagraphs($locale);
+        $certIdx = self::findCompanyIndex('/ISO|сертификац/iu');
+        $serviceIdx = self::findCompanyIndex('/филиалов/iu');
+
+        $items = [
+            ['question' => 'Какие категории продукции выпускает LCPumps?', 'answer' => 'Насосы, трубопроводная арматура, электрические шкафы управления и оборудование для водоснабжения.'],
+            ['question' => 'В каких отраслях применяется продукция?', 'answer' => $company[2] ?? ''],
+            ['question' => 'Какие сертификаты имеет компания?', 'answer' => $certIdx >= 0 ? ($company[$certIdx] ?? '') : ''],
+            ['question' => 'Есть ли сервисная сеть?', 'answer' => $serviceIdx >= 0 ? ($company[$serviceIdx] ?? '') : ''],
+        ];
+
+        return array_values(array_filter($items, fn ($item) => $item['answer'] !== ''));
+    }
+
+    /**
+     * Ports data/content.ts's getAboutSubpages() — the 4 "primary" about-us
+     * subpages (as opposed to the 6 "extra" ones in
+     * AboutUsController::EXTRA_PAGE_CONTENT, which aren't in this list).
+     *
+     * @return array<int, array{slug: string, paragraphs: array<int, string>}>
+     */
+    public static function aboutSubpages(string $locale): array
+    {
+        $company = self::companyParagraphs($locale);
+        $innovationIdx = array_slice(self::findCompanyIndices('/инновац|патент|технолог/iu'), 0, 3);
+        $sustainabilityIdx = array_slice(self::findCompanyIndices('/окружающ|водн/iu'), 0, 3);
+
+        return [
+            ['slug' => 'our-company', 'paragraphs' => array_slice($company, 0, 4)],
+            ['slug' => 'innovation', 'paragraphs' => array_map(fn ($i) => $company[$i], $innovationIdx)],
+            ['slug' => 'history', 'paragraphs' => array_slice($company, 0, 2)],
+            ['slug' => 'sustainability', 'paragraphs' => array_map(fn ($i) => $company[$i], $sustainabilityIdx)],
+        ];
+    }
+
+    private const array GENERIC_ABOUT_MESSAGE = [
+        'ru' => 'Информация о LCPumps доступна в разделе О компании.',
+        'kk' => 'LCPumps туралы ақпаратты «Компания туралы» бөлімінен алуға болады.',
+        'en' => 'Information about LCPumps is available in the About Us section.',
+        'zh' => '有关LCPumps的信息，请查看"关于我们"板块。',
+    ];
+
+    public static function genericAboutMessage(string $locale): string
+    {
+        return self::GENERIC_ABOUT_MESSAGE[$locale] ?? self::GENERIC_ABOUT_MESSAGE['ru'];
+    }
+
+    /** @var array<string, array<int, array{value: string, label: string}>> */
+    private const array ABOUT_STATS = [
+        'ru' => [
+            ['value' => '5', 'label' => 'промышленных парков'],
+            ['value' => '550 000 м²', 'label' => 'производственных площадей'],
+            ['value' => '2000+', 'label' => 'комплектов оборудования'],
+            ['value' => '30+', 'label' => 'филиалов по Китаю'],
+        ],
+        'kk' => [
+            ['value' => '5', 'label' => 'индустриялық парк'],
+            ['value' => '550 000 м²', 'label' => 'өндірістік алаң'],
+            ['value' => '2000+', 'label' => 'жабдық жинағы'],
+            ['value' => '30+', 'label' => 'Қытай бойынша филиал'],
+        ],
+        'en' => [
+            ['value' => '5', 'label' => 'industrial parks'],
+            ['value' => '550,000 m²', 'label' => 'of production space'],
+            ['value' => '2,000+', 'label' => 'sets of equipment'],
+            ['value' => '30+', 'label' => 'branches across China'],
+        ],
+        'zh' => [
+            ['value' => '5', 'label' => '工业园区'],
+            ['value' => '550,000 m²', 'label' => '生产面积'],
+            ['value' => '2,000+', 'label' => '台（套）设备'],
+            ['value' => '30+', 'label' => '中国分支机构'],
+        ],
+    ];
+
+    /** @return array<int, array{value: string, label: string}> */
+    public static function aboutStats(string $locale): array
+    {
+        return self::ABOUT_STATS[$locale] ?? self::ABOUT_STATS['ru'];
+    }
+
+    /** @var array<string, array<int, string>> */
+    private const array ABOUT_AWARDS = [
+        'ru' => [
+            'Инновационное предприятие',
+            'Известная торговая марка',
+            'Известная торговая марка Шанхая',
+            'Известный бренд Китая',
+            'Первое национальное предприятие по производству энергосберегающих насосов',
+            'Шанхайское высокотехнологичное предприятие',
+            '50 лучших частных производственных предприятий Шанхая',
+            '100 лучших промышленных предприятий Шанхая',
+            'Десять лучших национальных брендов водной отрасли Китая',
+        ],
+        'kk' => [
+            'Инновациялық кәсіпорын',
+            'Танымал сауда белгісі',
+            'Шанхайдың танымал сауда белгісі',
+            'Қытайдың танымал бренді',
+            'Энергия үнемдейтін сорғы өндіру бойынша бірінші ұлттық кәсіпорын',
+            'Шанхайдың жоғары технологиялық кәсіпорны',
+            'Шанхайдың үздік 50 жеке өндірістік кәсіпорны',
+            'Шанхайдың үздік 100 өнеркәсіптік кәсіпорны',
+            'Қытайдың су саласындағы үздік он ұлттық бренді',
+        ],
+        'en' => [
+            'Innovative Enterprise',
+            'Well-Known Trademark',
+            'Well-Known Trademark of Shanghai',
+            'Well-Known Brand of China',
+            'First National Enterprise for Energy-Saving Pump Manufacturing',
+            'Shanghai High-Tech Enterprise',
+            'Top 50 Private Manufacturing Enterprises of Shanghai',
+            'Top 100 Industrial Enterprises of Shanghai',
+            "Top Ten National Brands of China's Water Industry",
+        ],
+        'zh' => [
+            '创新型企业',
+            '知名商标',
+            '上海市著名商标',
+            '中国知名品牌',
+            '首批国家级节能水泵生产企业',
+            '上海市高新技术企业',
+            '上海市50强民营制造企业',
+            '上海市100强工业企业',
+            '中国水行业十大民族品牌',
+        ],
+    ];
+
+    /** @return array<int, string> */
+    public static function aboutAwards(string $locale): array
+    {
+        return self::ABOUT_AWARDS[$locale] ?? self::ABOUT_AWARDS['ru'];
+    }
+
+    /** Locale-independent, ported from data/content.ts's aboutCertifications. */
+    public const array ABOUT_CERTIFICATIONS = ['ISO 09001', 'ISO 14001', 'OHSAS 18001', 'CCC', 'CQC', 'CE', 'MA', 'SMA'];
+
+    /**
+     * Locale-independent, ported from data/content.ts's aboutClients.
+     *
+     * @var array<int, array{name: string, logo: string}>
+     */
+    public const array ABOUT_CLIENTS = [
+        ['name' => 'General Motors', 'logo' => '/assets/clients/general-motors.svg'],
+        ['name' => 'Bayer', 'logo' => '/assets/clients/bayer.svg'],
+        ['name' => 'Siemens', 'logo' => '/assets/clients/siemens.svg'],
+        ['name' => 'Volkswagen', 'logo' => '/assets/clients/volkswagen.svg'],
+        ['name' => 'Coca-Cola', 'logo' => '/assets/clients/coca-cola.svg'],
+    ];
 }

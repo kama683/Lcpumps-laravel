@@ -10,6 +10,7 @@ import { initCatalogPanel } from './catalog-panel';
 import { initCatalogSearch } from './catalog-search';
 import { initTilt } from './tilt';
 import { initProductDownload } from './product-download';
+import { initAccordion } from './accordion';
 
 function boot() {
     initHeader();
@@ -24,6 +25,7 @@ function boot() {
     initCatalogSearch();
     initTilt();
     initProductDownload();
+    initAccordion();
 }
 
 if (document.readyState === 'loading') {

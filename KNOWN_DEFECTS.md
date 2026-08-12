@@ -94,10 +94,14 @@ FAQ question text and 3 of the 4 Applications card titles additionally
 requires new translated copy for kk/en/zh that doesn't exist yet in either
 repo — needs to be sourced before that part of the fix can ship.
 
-**Status:** preserved as-is in the Laravel port for Stage 5 batch 3
-(`ApplicationsController`, and batch 4's `ServicesController`/`FaqController`/
-`ContactController` will follow the same precedent — call the equivalent
-PHP helpers without a locale argument, matching the source bug exactly).
-**Fix:** deferred to a coordinated commit across both repos, gated on the
-client providing the missing FAQ-question and Applications-card-title
-translations for kk/en/zh.
+**Status:** preserved as-is in the Laravel port — `ApplicationsController`
+(Stage 5 batch 3), `ServicesController`/`FaqController` (batch 4) all call
+the equivalent PHP helpers (`App\Support\Content::companyParagraphs()`/
+`faqItems()`) without a locale argument, matching the source bug exactly.
+`AboutUsController::index()` hardcodes the Russian `<title>` the same way.
+`ContactController`'s GET page (batch 5, not built yet) will follow the
+same precedent when it's built.
+**Fix:** deferred to a coordinated commit across both repos. Translation
+copy is no longer an external blocker — being written in-house (see
+STATUS.md §5/§6) — but the fix itself still waits for full Stage 5
+sign-off, same as the other preserved-as-is defects.

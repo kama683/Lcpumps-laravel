@@ -38,6 +38,13 @@ const PAGES = {
   projectDetail: '/project/bird-nest',
   applications: '/applications',
   waterWastewater: '/applications/water-wastewater',
+  aboutUs: '/about-us',
+  aboutUsPrimary: '/about-us/our-company',
+  aboutUsExtra: '/about-us/certifications',
+  services: '/services',
+  solutions: '/solutions',
+  faq: '/faq',
+  news: '/news',
 };
 
 const DEFAULT_LOCALES = [

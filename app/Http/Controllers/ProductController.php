@@ -158,10 +158,23 @@ class ProductController extends Controller
             ? $defaultPanelId
             : ($panelIds[0] ?? 'wastewater-submersible');
 
+        // Deliberately keyed by every Site::CATALOG_NAV id, not just the ones
+        // in $panels for this page: this same map is serialized to JS (see
+        // catalog-panel.js) and used there to resolve the mobile category-
+        // picker label for whichever panel is active, exactly like the
+        // source's tCatalogNav(activePanel) — which never checks $panels
+        // either. A version scoped to only this page's $panels caused a
+        // real bug: on /products/control (where $panels is empty), the
+        // client-side re-render on page load found no entry for the
+        // resolved default panel and blanked out both the mobile label and
+        // the H1 that the server had just rendered correctly.
         $panelLabels = [];
+        foreach (Site::CATALOG_NAV as $nav) {
+            $panelLabels[$nav['id']] = __('CatalogNav.'.($nav['id'] === 'valves' ? 'valvesFooterLabel' : $nav['id']));
+        }
+
         $heroDataByPanel = [];
         foreach ($panels as $panel) {
-            $panelLabels[$panel['id']] = __('CatalogNav.'.($panel['id'] === 'valves' ? 'valvesFooterLabel' : $panel['id']));
             $heroDataByPanel[$panel['id']] = $this->heroData($panel['id'], $panel['section']['products'][0]['slug'] ?? null);
         }
 
@@ -188,7 +201,11 @@ class ProductController extends Controller
             'intro' => Site::catalogIntro($locale),
             'panels' => $panels,
             'panelLabels' => $panelLabels,
-            'heading' => $panelLabels[$resolvedDefault] ?? $title,
+            // $panelLabels is now keyed by every CATALOG_NAV id (see above),
+            // so checking membership in $panelIds — this page's real panels —
+            // is what actually decides the title fallback; a plain ?? on
+            // $panelLabels would never fall through any more.
+            'heading' => in_array($resolvedDefault, $panelIds, true) ? $panelLabels[$resolvedDefault] : $title,
             'defaultPanelLabel' => $defaultPanelLabel,
             'heroDataByPanel' => $heroDataByPanel,
             'searchIndex' => $this->catalog->searchIndex($category, $locale),

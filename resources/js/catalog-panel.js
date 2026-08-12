@@ -14,6 +14,7 @@ export function initCatalogPanel() {
 
     const panelIds = JSON.parse(root.dataset.panelIds || '[]');
     const defaultPanelId = root.dataset.defaultPanel;
+    const defaultTitle = root.dataset.defaultTitle || '';
     const panelLabels = JSON.parse(document.getElementById('catalog-panel-labels')?.textContent || '{}');
     const heroData = JSON.parse(document.getElementById('catalog-hero-data')?.textContent || '{}');
     const heroContainer = document.querySelector('[data-category-hero]');
@@ -83,9 +84,15 @@ export function initCatalogPanel() {
             btn.className = active ? NAV_ACTIVE : NAV_INACTIVE;
         });
 
+        // Mobile label always resolves via direct translation, same as the
+        // source's tCatalogNav(activePanel) — panelLabels now covers every
+        // CatalogNav id, not just this page's real panels, so this never
+        // blanks out. The H1 only uses that translation when panelId is one
+        // of this page's real panels; otherwise it falls back to the static
+        // page title, matching CatalogPageShell's `activePanelData ? ... : title`.
         const label = panelLabels[panelId] || '';
         if (mobileLabel) mobileLabel.textContent = label;
-        if (heroHeading) heroHeading.textContent = label;
+        if (heroHeading) heroHeading.textContent = panelIds.includes(panelId) ? label : defaultTitle;
 
         renderHero(panelId);
     }
