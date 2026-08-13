@@ -8,6 +8,14 @@
         <meta name="description" content="{{ $metaDescription }}">
     @endisset
 
+    {{-- hreflang: one <link> per locale (ru/kk/en/zh) plus x-default (→ ru),
+         resolved from the route actually matched for this request so every
+         controller gets it for free. Absolute https://www.lcpumps.kz URLs,
+         reciprocal by construction — see SeoMetadataService::hreflangUrls(). --}}
+    @foreach (app(\App\Services\SeoMetadataService::class)->hreflangForCurrentRequest() as $hreflangLocale => $hreflangHref)
+        <link rel="alternate" hreflang="{{ $hreflangLocale }}" href="{{ $hreflangHref }}">
+    @endforeach
+
     {{-- Progressive-enhancement gate: see resources/css/app.css for the
          html.js-scoped rules this enables (scroll reveal, image fade-in). --}}
     <script>document.documentElement.classList.add('js')</script>

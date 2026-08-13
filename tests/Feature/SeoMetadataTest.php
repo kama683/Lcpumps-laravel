@@ -3,10 +3,14 @@
 namespace Tests\Feature;
 
 use App\Services\SeoMetadataService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class SeoMetadataTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -14,35 +18,11 @@ class SeoMetadataTest extends TestCase
         config(['app.url' => 'https://www.lcpumps.kz']);
         app()->setLocale('ru');
 
-        // Ensure a minimal products table and translations exist for the
-        // in-memory test DB so the sitemap can be generated deterministically.
-        // Creating lightweight schema here avoids depending on the full
-        // migration stack during fast CI runs.
-        \Illuminate\Support\Facades\Schema::dropIfExists('product_translations');
-        \Illuminate\Support\Facades\Schema::dropIfExists('products');
-
-        \Illuminate\Support\Facades\Schema::create('products', function (\Illuminate\Database\Schema\Blueprint $table) {
-            $table->string('slug')->primary();
-            $table->string('code')->nullable();
-            $table->string('category')->default('pumps');
-            $table->string('section_id')->nullable();
-            $table->string('image')->nullable();
-            $table->integer('sort_order')->default(0);
-            $table->timestamps();
-        });
-
-        \Illuminate\Support\Facades\Schema::create('product_translations', function (\Illuminate\Database\Schema\Blueprint $table) {
-            $table->id();
-            $table->string('product_slug');
-            $table->string('locale');
-            $table->string('name')->nullable();
-            $table->json('description')->nullable();
-            $table->json('specs')->nullable();
-            $table->json('applications')->nullable();
-            $table->unique(['product_slug', 'locale']);
-        });
-
-        // Seed a reasonable number of products so sitemap size assertions pass.
+        // RefreshDatabase migrates the full schema (sections, products,
+        // product_translations, ...) so pages that touch more than just the
+        // products table (e.g. category pages joining sections) render
+        // correctly under test, not just the sitemap. Only the row data
+        // below is fixture-specific.
         $count = 68; // matches the exported catalog size used elsewhere
         $inserts = [];
         $translations = [];
@@ -53,6 +33,8 @@ class SeoMetadataTest extends TestCase
                 'code' => sprintf('P%03d', $i),
                 'category' => 'pumps',
                 'sort_order' => $i,
+                'stock_quantity' => 10,
+                'price' => 1000,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
@@ -67,8 +49,8 @@ class SeoMetadataTest extends TestCase
             ];
         }
 
-        \Illuminate\Support\Facades\DB::table('products')->insert($inserts);
-        \Illuminate\Support\Facades\DB::table('product_translations')->insert($translations);
+        DB::table('products')->insert($inserts);
+        DB::table('product_translations')->insert($translations);
     }
 
     public function test_robots_txt_matches_live_site_rules(): void
@@ -141,5 +123,78 @@ class SeoMetadataTest extends TestCase
                 $this->assertSame($links[$locale], $service->absoluteUrlForRoute($route['name'], $route['params'], $locale));
             }
         }
+    }
+
+    /**
+     * Not just "does the service compute the right URLs" (the test above) —
+     * this hits actual rendered pages through the HTTP kernel and reads the
+     * <link rel="alternate"> tags out of the response body, on both ends of
+     * the relationship: /page must link to /kk/page, AND /kk/page must link
+     * back to the exact same /page URL. That reciprocity is what search
+     * engines actually require and what a service-level unit test can't
+     * catch (e.g. a layout that never got the hreflang loop wired in at
+     * all would still pass the test above).
+     */
+    public function test_rendered_public_pages_include_reciprocal_hreflang_links(): void
+    {
+        $service = app(SeoMetadataService::class);
+        $locales = ['ru', 'kk', 'en', 'zh'];
+
+        // A representative sample, not the full 33-route sitemap list: one
+        // static page, one page with a slug param, and one category page —
+        // enough to exercise every route "shape" without this test's runtime
+        // scaling with the size of the catalog.
+        $sample = [
+            ['name' => 'home', 'params' => []],
+            ['name' => 'applications.index', 'params' => []],
+            ['name' => 'applications.water-wastewater', 'params' => []],
+            ['name' => 'services.index', 'params' => []],
+            ['name' => 'faq.index', 'params' => []],
+            ['name' => 'about-us.show', 'params' => ['slug' => 'our-company']],
+            ['name' => 'products.pumps', 'params' => []],
+            ['name' => 'products.show', 'params' => ['slug' => 'product-1']],
+        ];
+
+        foreach ($sample as $route) {
+            $links = $service->hreflangUrls($route['name'], $route['params']);
+            $ruUrl = $links['ru'];
+            $ruPath = parse_url($ruUrl, PHP_URL_PATH);
+
+            $ruResponse = $this->get($ruPath);
+            $ruResponse->assertOk();
+            $ruHtml = $ruResponse->getContent();
+
+            foreach ($locales as $locale) {
+                $this->assertStringContainsString(
+                    sprintf('<link rel="alternate" hreflang="%s" href="%s">', $locale, $links[$locale]),
+                    $ruHtml,
+                    "Rendered {$ruPath} is missing its hreflang={$locale} link"
+                );
+            }
+            $this->assertStringContainsString(
+                sprintf('<link rel="alternate" hreflang="x-default" href="%s">', $links['x-default']),
+                $ruHtml
+            );
+
+            // Reciprocity: fetch the kk variant and confirm ITS OWN hreflang
+            // set points back to the exact ru URL we started from, not just
+            // that both independently agree with the service.
+            $kkPath = parse_url($links['kk'], PHP_URL_PATH);
+            $kkResponse = $this->get($kkPath);
+            $kkResponse->assertOk();
+            $this->assertStringContainsString(
+                sprintf('<link rel="alternate" hreflang="ru" href="%s">', $ruUrl),
+                $kkResponse->getContent(),
+                "Rendered {$kkPath} does not link back to {$ruUrl} — hreflang is not reciprocal"
+            );
+        }
+    }
+
+    public function test_admin_pages_have_no_hreflang_links(): void
+    {
+        $response = $this->get('/admin/login');
+
+        $response->assertOk();
+        $this->assertStringNotContainsString('rel="alternate"', $response->getContent());
     }
 }

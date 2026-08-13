@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-use App\Support\Content;
 use App\Support\Routing\LocalizedRoutes;
-use Illuminate\Support\Collection;
 
 class SeoMetadataService
 {
@@ -89,6 +87,34 @@ class SeoMetadataService
         $urls['x-default'] = $this->absoluteUrlForRoute($routeName, $params, 'ru');
 
         return $urls;
+    }
+
+    /**
+     * hreflang links for whatever public route is currently being rendered,
+     * for use straight from the shared layout (components/layouts/app.blade.php)
+     * without every controller having to pass routeName/params down manually.
+     *
+     * Returns [] outside of a routed request (e.g. no route matched) rather
+     * than throwing, so a stray call from a non-page context degrades to "no
+     * hreflang links" instead of a 500.
+     */
+    public function hreflangForCurrentRequest(): array
+    {
+        $route = request()->route();
+        $name = $route?->getName();
+
+        if ($name === null) {
+            return [];
+        }
+
+        if (str_starts_with($name, LocalizedRoutes::LOCALIZED_NAME_PREFIX)) {
+            $name = substr($name, strlen(LocalizedRoutes::LOCALIZED_NAME_PREFIX));
+        }
+
+        $params = $route->parameters();
+        unset($params['locale']);
+
+        return $this->hreflangUrls($name, $params);
     }
 
     public function absoluteUrlForRoute(string $routeName, array $params = [], string $locale = 'ru'): string
