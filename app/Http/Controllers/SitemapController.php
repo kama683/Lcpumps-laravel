@@ -20,11 +20,6 @@ class SitemapController extends Controller
 
         $entries = $this->seo->sitemapEntries();
 
-        // Debug comment inserted temporarily to help diagnostics in CI — shows
-        // how many entries the service produced. Will be removed once tests
-        // are green and behavior is confirmed.
-        $xml->appendChild($xml->createComment('sitemap-entries-count:'.count($entries)));
-
         foreach ($entries as $entry) {
             $urlNode = $xml->createElement('url');
             $locNode = $xml->createElement('loc', $entry['loc']);
