@@ -190,3 +190,57 @@ Verified live (not just read) in both repos: `curl`'d `/en/faq`,
 on both `127.0.0.1:8010` and `localhost:3000` — all correctly localized
 and matching between the two repos. `laravel/` full test suite re-run
 clean: 76/76. `site/` type-checked clean via `npx tsc --noEmit`.
+
+---
+
+## 3. Catalog listing order doesn't match the reference site (found in Stage 10 final comparison, 2026-08-13)
+
+Not a bug on the live site being preserved, and not something introduced
+by today's work — a **deliberate divergence from an earlier session**,
+whose visible consequence across most of the catalog was never tracked
+until now. Different category from #1/#2 above; documenting it here
+anyway since this file is where visual-parity findings live.
+
+**What differs:** `/products`, `/products/pumps`, `/products/valves`,
+`/products/control`, `/products/water`, and `/solutions` all show
+products in a **different order** between `site/` and `laravel/`, on
+**every locale including `ru`** — confirmed via the Stage 10 closing
+`compare-screenshots.cjs` sweep (all 18 pages × 4 locales × 3 widths,
+456 captures) and a pixel-diff pass: these pages account for the large
+majority of the 93 pairs that differ beyond a 2% pixel threshold, some
+as high as 11%. Root cause, found by reading both repos' sources:
+
+- `site/lib/repositories/products.ts:62` — `.orderBy(productTranslations.name)`,
+  i.e. **alphabetical by the product's translated name in the current
+  locale.**
+- `laravel/app/Services/CatalogService.php`'s `allProducts()` —
+  `->orderBy('sort_order')`, a fixed column that doesn't depend on locale.
+
+`sort_order` doesn't exist in the source at all — it's a Laravel-only
+addition, documented in `app/Services/ProductAdminService.php`'s class
+docblock: *"the source has no explicit catalog ordering column"*. It was
+added so a product created through the admin panel appends at the end of
+its section instead of jumping to an arbitrary position determined by
+alphabetical sort of its name — a reasonable admin-usability improvement.
+Its side effect on the **public-facing** default ordering of nearly every
+catalog page — which now differs from the reference site on all four
+locales, not just kk/en/zh — was not evaluated or flagged at the time.
+
+**Ruled out as the explanation for two related-looking findings, to avoid
+double-counting:** `aboutUsPrimary_kk_*`/`aboutUsExtra_kk_*` diffs in the
+same sweep looked at first like a content bug, but a direct `curl` diff of
+the rendered paragraph text on both servers showed it byte-for-byte
+identical — that pair's small pixel diff is a vertical spacing/rendering
+artifact, unrelated to this finding.
+
+**Status: documented only, code unchanged, per explicit instruction —
+`sort_order` stays as the Laravel port's ordering column.** Whether to
+match the reference site's alphabetical order, keep `sort_order`, or
+offer both (e.g. alphabetical as the public default with `sort_order`
+only steering same-name tiebreaks) is a product decision for the client,
+not something to resolve unilaterally mid-migration. If a future session
+picks this up: the fix is a one-line change to `allProducts()`'s
+`orderBy()` clause plus a full catalog-page rescreenshot to confirm
+parity — not a schema change, `sort_order` can stay in place unused by
+the public query and still serve the admin "append to end" behavior on
+create.

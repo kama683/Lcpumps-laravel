@@ -83,6 +83,7 @@ function parseArgs() {
   const pageNames = args.pages ? args.pages.split(',') : Object.keys(PAGES);
   const localeCodes = args.locales ? args.locales.split(',') : DEFAULT_LOCALES.map((l) => l.code);
   const widths = args.widths ? args.widths.split(',').map(Number) : DEFAULT_WIDTHS;
+  const targetNames = args.targets ? args.targets.split(',') : ['next', 'laravel'];
 
   return {
     pages: pageNames.map((name) => {
@@ -91,6 +92,7 @@ function parseArgs() {
     }),
     locales: DEFAULT_LOCALES.filter((l) => localeCodes.includes(l.code)),
     widths,
+    targetNames,
     nextBase: args.next || 'http://localhost:3000',
     laravelBase: args.laravel || 'http://127.0.0.1:8010',
     outDir: args.out || path.resolve(__dirname, '../storage/app/screenshot-compare'),
@@ -109,33 +111,51 @@ async function scrollThrough(page) {
 }
 
 async function main() {
-  const { pages, locales, widths, nextBase, laravelBase, outDir } = parseArgs();
+  const { pages, locales, widths, targetNames, nextBase, laravelBase, outDir } = parseArgs();
   fs.mkdirSync(outDir, { recursive: true });
 
   const browser = await chromium.launch({ executablePath: findChrome(), headless: true });
   const targets = [
     { name: 'next', base: nextBase },
     { name: 'laravel', base: laravelBase },
-  ];
+  ].filter((t) => targetNames.includes(t.name));
 
   let failures = 0;
 
   for (const width of widths) {
-    const context = await browser.newContext({ viewport: { width, height: 900 } });
-    const page = await context.newPage();
+    let context = await browser.newContext({ viewport: { width, height: 900 } });
+    let page = await context.newPage();
 
     for (const target of targets) {
       for (const locale of locales) {
         for (const p of pages) {
           const url = `${target.base}${locale.prefix}${p.path === '' ? '/' : p.path}`;
           const file = path.join(outDir, `${p.name}_${locale.code}_${width}_${target.name}.png`);
-          try {
-            await page.goto(url, { waitUntil: 'networkidle', timeout: 20000 });
-            await scrollThrough(page);
-            await page.screenshot({ path: file, fullPage: true });
-            console.log(`OK   ${url} -> ${path.basename(file)}`);
-          } catch (err) {
-            console.log(`FAIL ${url} -> ${err.message}`);
+
+          // One retry with a fresh page: a dev server that dropped a
+          // connection (both dev servers in this project are flaky —
+          // Turbopack crashes, php artisan serve hangs) otherwise wedges
+          // the shared `page` object into a "chrome-error://" state where
+          // every subsequent goto() on it cascades as "interrupted by
+          // another navigation", failing every remaining URL in this
+          // width/target regardless of whether the actual server recovered.
+          let lastErr;
+          for (let attempt = 0; attempt < 2; attempt++) {
+            try {
+              await page.goto(url, { waitUntil: 'networkidle', timeout: 45000 });
+              await scrollThrough(page);
+              await page.screenshot({ path: file, fullPage: true });
+              console.log(`OK   ${url} -> ${path.basename(file)}`);
+              lastErr = null;
+              break;
+            } catch (err) {
+              lastErr = err;
+              await page.close().catch(() => {});
+              page = await context.newPage();
+            }
+          }
+          if (lastErr) {
+            console.log(`FAIL ${url} -> ${lastErr.message}`);
             failures++;
           }
         }
