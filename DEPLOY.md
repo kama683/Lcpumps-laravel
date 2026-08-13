@@ -16,8 +16,45 @@ site is completely unaffected — abandon and retry, no rush.
 
 ## 1. Buy hosting and do the one blocking check
 
-Buy PS.kz tariff **M** (or higher — M is the minimum this app was scoped
-against for its PHP/DB/storage requirements).
+**Regular shared hosting (Plesk "Виртуальный хостинг"), not VPS.** This whole
+runbook is built around it — no SSH, admin commands run via Plesk Scheduled
+Tasks (step 6/7). VPS would only be worth the extra cost/complexity if this
+site needed root access, custom system packages, or traffic high enough to
+need dedicated resources — none of which applies here (a B2B industrial
+catalog site, not a high-traffic e-commerce store).
+
+Buy PS.kz tariff **M** (5 GB SSD, 768 MB RAM, 1 vCPU, ~1 628 тг/мес as of
+2026-08-13 — confirm current pricing at order time, ps.kz changes these).
+Reasoning, not a guess:
+
+- **Disk:** the deployed app itself (`vendor/` + `public/build/` + code) is
+  ~90 MB measured locally (`vendor/` 78 MB, `public/build/` 9.5 MB) — even
+  the smallest **XS** tariff (1 GB) technically fits that. What XS doesn't
+  leave room for is growth: product images, contact-form attachments (up to
+  40 MB per submission), logs, and Plesk backups all accumulate over the
+  site's life. M's 5 GB gives years of headroom for a catalog site this
+  size; **S**'s 2 GB is workable but tighter.
+- **RAM — the real differentiator between tariffs, not disk:** PS.kz
+  documents no limit on databases/mailboxes/domains per account regardless
+  of tariff (confirmed via their FAQ) — what actually scales with tariff is
+  RAM/CPU, which caps how many PHP-FPM worker processes can run at once. A
+  Laravel worker for an app this size typically sits in the tens of MB of
+  RSS; **XS's 256 MB** leaves only a handful of workers once Plesk's own
+  agent and ImunifyAV scanning are accounted for — workable for a
+  low-traffic site but with very little margin for a slow request or a
+  crawler burst. **M's 768 MB** gives a comfortable worker pool for this
+  site's expected traffic (a niche B2B catalog, not high-volume retail)
+  without paying for **L**'s 1024 MB/12 GB (~3 464 тг/мес), which is more
+  than this site is likely to need.
+- PS.kz's shared-hosting connection limit is **128 simultaneous connections
+  per site** (their error-509 documentation) — every asset (image, CSS, JS)
+  counts, not just page views, but this is a soft ceiling for a
+  moderate-traffic brochure site, not something to design around.
+
+If traffic ends up meaningfully higher than expected after launch, or the
+5-fcgi-worker-style contention mentioned in `STATUS.md`/project notes turns
+out to bite in practice, upgrading from M to L is a Plesk-side tariff change,
+not a redeploy — start at M, watch real usage, upgrade only if needed.
 
 **Before writing a single file to the server**, confirm in the Plesk panel
 for the *actual purchased account* — not PS.kz's general marketing page,
