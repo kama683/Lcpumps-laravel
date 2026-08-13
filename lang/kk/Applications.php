@@ -8,8 +8,8 @@ return [
     'wastewaterPumpsLink' => 'Ақаба суларға арналған сорғылар',
     'cards' => [
         'industriesOfApplication' => 'Қолданылу салалары',
-        'buildingConstruction' => 'Ғимаратты құрылыс',
-        'industrialAndMining' => 'Өндіріс және тау-кен өндіктерінің кәсіпорындары',
+        'buildingConstruction' => 'Ғимарат құрылысы',
+        'industrialAndMining' => 'Өнеркәсіптік және тау-кен кәсіпорындары',
         'projects' => 'Жобалар',
     ],
 ];

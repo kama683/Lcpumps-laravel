@@ -39,8 +39,12 @@ class ApplicationsController extends Controller
     {
         $locale = app()->getLocale();
         $company = Content::companyParagraphs($locale);
-        $text = collect($company)->first(fn ($p) => preg_match('/сточн|водоснабж/iu', $p) === 1)
-            ?? $company[2] ?? '';
+        // Match against the RU-canonical array (Content::findCompanyIndex),
+        // not $company directly — $company is already locale-translated,
+        // so this Russian regex tested against it never matches for
+        // kk/en/zh and silently falls through to the wrong paragraph.
+        $textIdx = Content::findCompanyIndex('/сточн|водоснабж/iu');
+        $text = ($textIdx >= 0 ? $company[$textIdx] : $company[2]) ?? '';
 
         return view('pages.applications.water-wastewater', [
             'metaTitle' => __('Applications.waterWastewaterLink'),

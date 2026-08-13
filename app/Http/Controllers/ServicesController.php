@@ -16,7 +16,12 @@ class ServicesController extends Controller
     {
         $locale = app()->getLocale();
         $company = Content::companyParagraphs($locale);
-        $servicePara = collect($company)->first(fn ($p) => preg_match('/филиалов/iu', $p) === 1) ?? '';
+        // Match the keyword against the RU-canonical array, not $company
+        // directly — $company is already locale-translated, so a Russian
+        // regex tested against it never matches for kk/en/zh and silently
+        // returns an empty paragraph.
+        $serviceIdx = Content::findCompanyIndex('/филиалов/iu');
+        $servicePara = $serviceIdx >= 0 ? ($company[$serviceIdx] ?? '') : '';
 
         return view('pages.services.index', [
             'metaTitle' => __('PageMetadata.services.title'),

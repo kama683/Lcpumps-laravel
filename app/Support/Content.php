@@ -34,9 +34,15 @@ class Content
         return self::company()[$locale] ?? self::company()['ru'];
     }
 
-    /** Finds a paragraph index in the canonical Russian source, so keyword
-     * matching stays correct regardless of which locale's text is displayed. */
-    private static function findCompanyIndex(string $pattern): int
+    /**
+     * Finds a paragraph index in the canonical Russian source, so keyword
+     * matching stays correct regardless of which locale's text is displayed.
+     * Public — call sites outside this class (ServicesController,
+     * ApplicationsController::waterWastewater()) need this too, since
+     * matching a Russian-keyword pattern directly against a non-Russian
+     * locale's own paragraph array silently never matches.
+     */
+    public static function findCompanyIndex(string $pattern): int
     {
         foreach (self::companyParagraphs('ru') as $i => $paragraph) {
             if (preg_match($pattern, $paragraph) === 1) {
