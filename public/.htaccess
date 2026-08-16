@@ -23,3 +23,25 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# Long cache for static assets — both public/build/ (Vite output,
+# content-hashed filenames like app-CX4-d7ly.css, so any content change
+# already produces a new URL — safe to mark immutable) and public/assets/
+# (bundled catalog photos, not hashed, but only ever change via a new
+# deploy, not at runtime — 30 days rather than "immutable" so a browser
+# still revalidates periodically instead of caching a stale image forever
+# if one is ever swapped in place under the same filename).
+#
+# Deliberately placed in this top-level public/.htaccess and matched by
+# extension rather than as a separate public/build/.htaccess: Vite's build
+# wipes and regenerates public/build/ on every `npm run build`
+# (build.emptyOutDir), which would silently delete a .htaccess living
+# inside it on the next deploy.
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|mjs)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    <FilesMatch "\.(png|jpe?g|gif|svg|webp|avif|ico|woff2?|ttf|eot)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+</IfModule>
