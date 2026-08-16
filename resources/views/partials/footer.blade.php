@@ -56,9 +56,9 @@
                         <x-icon name="map-pin" class="mt-0.5 size-4 shrink-0 text-primary" />
                         {{ __('Footer.address') }}
                     </span>
-                    <a href="mailto:lcpumpskz@gmail.com" class="inline-flex items-start gap-2 text-footer-link hover:text-primary no-underline">
+                    <a href="mailto:info@lcpumps.kz" class="inline-flex items-start gap-2 text-footer-link hover:text-primary no-underline">
                         <x-icon name="mail" class="mt-0.5 size-4 shrink-0 text-primary" />
-                        lcpumpskz@gmail.com
+                        info@lcpumps.kz
                     </a>
                     <a href="tel:+77717786877" class="inline-flex items-start gap-2 text-footer-link hover:text-primary no-underline">
                         <x-icon name="phone" class="mt-0.5 size-4 shrink-0 text-primary" />

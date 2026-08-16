@@ -235,7 +235,7 @@
                 <x-icon-box icon="mail" size="sm" class="mb-4" />
                 <div class="text-xs font-bold tracking-wide uppercase text-primary mb-2">{{ __('Contact.direct.email.label') }}</div>
                 <div class="text-[15px] leading-relaxed text-muted [&_strong]:text-heading [&_strong]:font-bold [&_a]:font-semibold">
-                    <a href="mailto:lcpumpskz@gmail.com">lcpumpskz@gmail.com</a>
+                    <a href="mailto:info@lcpumps.kz">info@lcpumps.kz</a>
                 </div>
             </div>
             <div class="bg-white border border-border-light rounded-2xl p-6 min-h-[148px] flex flex-col hover:shadow-card-sm hover:-translate-y-0.5 hover:border-[#f2d8db] transition-[transform,border-color,box-shadow] duration-200">
