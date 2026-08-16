@@ -184,21 +184,35 @@ to `laravel/.env` on the server** (Plesk File Manager upload, or as the
 one deliberate exception to "don't FTP local files" — either way, never
 via git).
 
-Two things flagged, not silently decided for you:
+Two things that were flagged in an earlier pass are now resolved:
 
-1. **`SESSION_LIFETIME=120`** (2 hours, Laravel's stock default) — the
-   value you gave. `.env.example`'s own comment documents a deliberate
-   earlier choice of `10080` (7 days), "matches the source's 7-day JWT
-   session length instead of Laravel's 2-hour default." Only the admin
-   panel uses sessions. Using your value as given — if the 2-hour figure
-   wasn't a deliberate change from that earlier decision, swap it back to
-   `10080` before uploading.
-2. **`TRUSTED_PROXIES=127.0.0.1`** — not something you provided; filled in
-   as the near-certain value for a same-box Apache→PHP-FPM hop on
-   CloudLinux, but **not confirmed against the real server** (no SSH to
-   check `REMOTE_ADDR` directly). Verify once live — see Step 8, don't
-   skip it, a wrong value here doesn't break the site but does break the
-   contact-form/admin-login rate limiters silently.
+1. **`SESSION_LIFETIME=120`** (2 hours, Laravel's stock default) —
+   **confirmed intentional**, not reverting to `.env.example`'s documented
+   `10080` (7 days). That 7-day figure was a forced tradeoff for the
+   source's stateless, unrevokable JWT sessions; a server-side session (what
+   this app actually uses) can be revoked at will, so there's no reason to
+   carry over that same long lifetime — 2 hours is the more appropriate
+   default here. Only the admin panel uses sessions, so this doesn't affect
+   visitors.
+2. **`TRUSTED_PROXIES=*`** (trust the direct TCP peer unconditionally) —
+   **not** a specific IP, and not a shortcut. A phpinfo dump from the real
+   server confirmed `REMOTE_ADDR` is `195.210.46.99` (the proxy), not
+   `127.0.0.1` as first guessed — but the value isn't `195.210.46.99`
+   either. Reasoning: PHP-FPM on this shared tariff has no ingress path
+   except through PS.kz's one Apache proxy, so an IP-allowlist here isn't
+   actually the security boundary — nothing can reach PHP-FPM pretending to
+   be a different, untrusted proxy in the first place, whether the setting
+   says `*` or a specific address. The real boundary is
+   `App\Http\Middleware\NormalizeRealIpHeader` (already in the codebase,
+   already tested — see its docblock): it always overwrites
+   `X-Forwarded-For` from `X-Real-IP` when present, and **strips
+   `X-Forwarded-For` entirely when `X-Real-IP` is absent** — confirmed via
+   the same phpinfo dump that PS.kz's proxy sends `X-Real-IP` and never
+   `X-Forwarded-For` itself, so any `X-Forwarded-For` arriving on its own
+   can only be a client trying to inject one directly, never a legitimate
+   chain. Full verification of this is Step 8 — don't skip it, it's the
+   thing actually standing between an attacker and the rate limiters, not
+   the `TRUSTED_PROXIES` value.
 
 ---
 
@@ -248,9 +262,10 @@ catching it at the source.
 don't leave the `admin:seed-user` task sitting in the list with real
 credentials in its argument history longer than needed to run it once.
 
-**If `.env` is ever edited again after this point** (e.g. fixing
-`TRUSTED_PROXIES` in Step 8), re-run `config:cache` — it's a snapshot, not
-re-read live from `.env` after being cached.
+**If `.env` is ever edited again after this point**, re-run `config:cache`
+— it's a snapshot, not re-read live from `.env` after being cached. (Step 8
+adds/removes a temporary *route*, not an `.env` change, so it needs
+`route:cache` re-run if that's active, not `config:cache`.)
 
 ---
 
@@ -278,31 +293,62 @@ below assumes a working baseline.
 
 ---
 
-## Step 8 — `TrustProxies` — verify the real value, don't just trust the guess
+## Step 8 — `TrustProxies` — verify it resolves the real visitor, and that spoofing doesn't work
 
-**Code side is already handled**, not something to configure here: PS.kz's
-proxy sends the visitor's IP as `X-Real-IP`, not the `X-Forwarded-For`
-Laravel's `TrustProxies` middleware expects by default. A new middleware
-(`App\Http\Middleware\NormalizeRealIpHeader`, already in the codebase,
-already covered by tests) copies `X-Real-IP` into `X-Forwarded-For` before
-`TrustProxies` runs, so the existing (already-tested)
-`config/trustedproxy.php` / `TRUSTED_PROXIES` mechanism works unchanged
-from there. **What's actually unverified is the `TRUSTED_PROXIES` value
-itself** (Step 5 filled in `127.0.0.1` as a best guess).
+Nothing to configure here — `TRUSTED_PROXIES=*` and
+`NormalizeRealIpHeader` are already in place (Step 5). This step is purely
+verification: prove `$request->ip()` actually resolves to the real
+visitor in production, and prove a spoofed header can't override it.
+Both matter — the rate limiters on the contact form and admin login are
+only as good as this.
 
-1. Confirm the real value: temporarily add a throwaway route (or reuse
-   `/up`) that dumps `request()->server('REMOTE_ADDR')`, load it once,
-   read the value, remove the temporary route. That value is what belongs
-   in `TRUSTED_PROXIES`.
-2. If it's not `127.0.0.1`, update `laravel/.env` (File Manager edit) and
-   re-run `config:cache` (Step 6.6, as a fresh one-off Scheduled Task).
-3. **Verify it actually works, don't just assume**: hit `/admin/login` 5
-   times with a spoofed header —
-   `curl -H "X-Real-IP: 1.2.3.4" https://www.lcpumps.kz/admin/login`,
-   incrementing the fake IP each call — and confirm the 6th attempt still
-   shows the rate-limited error ("Слишком много попыток"). If it doesn't,
-   `TRUSTED_PROXIES` is still wrong, or `X-Real-IP` isn't arriving the way
-   assumed — the limiter is bypassable until this passes.
+**1. Confirm the real IP resolves correctly — from an actual outside
+network, not this machine:**
+
+Add a throwaway route that dumps the resolved IP:
+
+```php
+// routes/web.php — temporary, remove after this check
+Route::get('/whoami-debug', fn () => request()->ip());
+```
+
+Upload just that one change (or add it via Plesk's File Manager editor
+directly on the server, faster than a redeploy for a one-line temporary
+route), then re-run `config:cache`/`route:cache` if they're active. Load
+`https://www.lcpumps.kz/whoami-debug` **from your phone, on mobile data**
+— not this Wi-Fi, not the same network as the server — so the IP it should
+show is a real, independently-known value (check `https://2ip.kz` on the
+same phone/connection first, or your carrier IP if you know it, then
+compare). It must show that value, not `195.210.46.99` (the proxy) and not
+`127.0.0.1`. If it shows the proxy's IP instead, `X-Real-IP` isn't arriving
+the way assumed, or `NormalizeRealIpHeader` isn't running before
+`TrustProxies` — re-check `bootstrap/app.php`'s middleware order.
+
+**Remove the temporary route once confirmed** — don't leave an
+unauthenticated IP-disclosure endpoint live.
+
+**2. Confirm a spoofed header can't override it — this is the part that
+actually protects the rate limiters:**
+
+```bash
+curl -H "X-Forwarded-For: 6.6.6.6" https://www.lcpumps.kz/whoami-debug
+```
+
+(Re-add the temporary route for this check if already removed, or combine
+both checks in the same window before removing it.) This must **not**
+return `6.6.6.6` — if it does, `NormalizeRealIpHeader` isn't stripping a
+directly-injected `X-Forwarded-For` the way `TrustedProxyIpTest`'s
+`test_spoofed_x_forwarded_for_is_stripped_under_trust_all_when_no_x_real_ip_present`
+proves it should, and the rate limiters are bypassable — a spoofer could
+get a fresh bucket on every request just by changing that header.
+
+**3. Confirm the rate limiter itself still triggers** with the (now
+verified-correct) real-IP resolution: hit `/admin/login` 6 times in a row
+from the same connection and confirm the 6th attempt shows "Слишком много
+попыток" — proves the limiter is both *not bypassable* (step 2) and
+*actually firing* (this step) rather than being silently defeated in the
+other direction (e.g. everyone sharing one bucket because IP resolution
+broke entirely).
 
 ---
 

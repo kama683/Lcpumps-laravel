@@ -116,7 +116,17 @@ class TrustedProxyIpTest extends TestCase
         $this->assertSame('195.210.46.99', $ip);
     }
 
-    public function test_x_real_ip_does_not_override_a_genuine_x_forwarded_for_chain(): void
+    /**
+     * PS.kz's proxy is confirmed (via a phpinfo dump from the real server)
+     * to never set X-Forwarded-For at all — only X-Real-IP. So if both
+     * headers show up on the same request, X-Forwarded-For can only be
+     * attacker-supplied (sent directly, trying to slip past the X-Real-IP
+     * mapping) — X-Real-IP must win, not the other way around. An earlier
+     * version of NormalizeRealIpHeader got this backwards (preserved a
+     * pre-existing X-Forwarded-For on the theory that it might be a real
+     * chain), which is exactly the gap this test now guards against.
+     */
+    public function test_x_real_ip_overrides_a_spoofed_x_forwarded_for_header(): void
     {
         config(['trustedproxy.proxies' => '195.210.46.99']);
 
@@ -132,6 +142,55 @@ class TrustedProxyIpTest extends TestCase
             return response('');
         });
 
-        $this->assertSame('9.9.9.9', $request->ip());
+        $this->assertSame('77.88.55.11', $request->ip());
+    }
+
+    /**
+     * The actual production combination: TRUSTED_PROXIES=* (trust the
+     * direct TCP peer unconditionally — see DEPLOY.md for why that's safe
+     * specifically because PHP-FPM has no ingress path except through this
+     * one proxy) means whatever ends up in X-Forwarded-For after
+     * NormalizeRealIpHeader runs is taken as-is. If a client sends
+     * X-Forwarded-For directly, with no X-Real-IP at all, that header must
+     * be stripped rather than trusted — under "*" there is no proxy-IP
+     * check left to catch it otherwise, this middleware is the only thing
+     * standing between an attacker's raw header and $request->ip().
+     */
+    public function test_spoofed_x_forwarded_for_is_stripped_under_trust_all_when_no_x_real_ip_present(): void
+    {
+        config(['trustedproxy.proxies' => '*']);
+
+        $request = Request::create('/admin/login', 'POST', [], [], [], [
+            'REMOTE_ADDR' => '195.210.46.99',
+            'HTTP_X_FORWARDED_FOR' => '6.6.6.6',
+        ]);
+
+        (new NormalizeRealIpHeader)->handle($request, function ($r) {
+            (new TrustProxies)->handle($r, fn ($r) => $r);
+
+            return response('');
+        });
+
+        // Falls back to REMOTE_ADDR (the proxy) — not great, not the real
+        // visitor either, but crucially NOT the attacker-chosen 6.6.6.6.
+        $this->assertSame('195.210.46.99', $request->ip());
+    }
+
+    public function test_x_real_ip_still_resolves_correctly_under_trust_all(): void
+    {
+        config(['trustedproxy.proxies' => '*']);
+
+        $request = Request::create('/admin/login', 'POST', [], [], [], [
+            'REMOTE_ADDR' => '195.210.46.99',
+            'HTTP_X_REAL_IP' => '77.88.55.11',
+        ]);
+
+        (new NormalizeRealIpHeader)->handle($request, function ($r) {
+            (new TrustProxies)->handle($r, fn ($r) => $r);
+
+            return response('');
+        });
+
+        $this->assertSame('77.88.55.11', $request->ip());
     }
 }
