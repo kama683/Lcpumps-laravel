@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureAdminAuthenticated;
+use App\Http\Middleware\NormalizeRealIpHeader;
 use App\Http\Middleware\RedirectIfAdminAuthenticated;
 use App\Http\Middleware\SetLocale;
 use App\Support\Routing\LocalizedRoutes;
@@ -18,6 +19,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Must run before TrustProxies (which is part of Laravel's default
+        // global stack) — see NormalizeRealIpHeader's docblock.
+        $middleware->prepend(NormalizeRealIpHeader::class);
+
         $middleware->web(append: [SetLocale::class]);
 
         $middleware->alias([
