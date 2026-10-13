@@ -220,7 +220,7 @@
     "src": "_pt-sans-700-normal-XWuytqPM.woff2"
   },
   "node_modules/canvg/lib/index.es.js": {
-    "file": "assets/index.es-BXbnQInn.js",
+    "file": "assets/index.es-CqOg1UdA.js",
     "name": "index.es",
     "src": "node_modules/canvg/lib/index.es.js",
     "isDynamicEntry": true,
@@ -236,7 +236,7 @@
     "isDynamicEntry": true
   },
   "node_modules/html2canvas/dist/html2canvas.js": {
-    "file": "assets/html2canvas-3lKOS4Xm.js",
+    "file": "assets/html2canvas-DO1I6q4k.js",
     "name": "html2canvas",
     "src": "node_modules/html2canvas/dist/html2canvas.js",
     "isDynamicEntry": true,
@@ -245,7 +245,7 @@
     ]
   },
   "node_modules/jspdf/dist/jspdf.es.min.js": {
-    "file": "assets/jspdf.es.min-zeIYbWt0.js",
+    "file": "assets/jspdf.es.min-Be0MDMFs.js",
     "name": "jspdf.es.min",
     "src": "node_modules/jspdf/dist/jspdf.es.min.js",
     "isDynamicEntry": true,
@@ -259,7 +259,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-CX4-d7ly.css",
+    "file": "assets/app-CPMKctuZ.css",
     "name": "app",
     "names": [
       "app.css"
@@ -268,7 +268,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-BJ7W44NY.js",
+    "file": "assets/app-CevDTnGp.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,

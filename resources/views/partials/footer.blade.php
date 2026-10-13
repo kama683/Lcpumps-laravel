@@ -68,8 +68,11 @@
             </div>
         </div>
 
-        <div class="border-t border-[#33434d] mt-11 pt-5 text-[13px] text-footer-muted">
+        <div class="border-t border-[#33434d] mt-11 pt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-[13px] text-footer-muted">
             <span>&copy; {{ \App\Support\Site::COMPANY_NAME }} {{ __('Footer.rightsReserved') }}</span>
+            <a href="{{ route('privacy-policy') }}" class="text-footer-link hover:text-primary no-underline">
+                {{ __('Footer.privacyPolicy') }}
+            </a>
         </div>
     </div>
 </footer>

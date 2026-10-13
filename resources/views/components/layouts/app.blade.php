@@ -1,3 +1,9 @@
+@props([
+    'title' => null,
+    'metaDescription' => null,
+    'canonicalUrl' => null,
+    'showHreflang' => true,
+])
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -7,14 +13,19 @@
     @isset($metaDescription)
         <meta name="description" content="{{ $metaDescription }}">
     @endisset
+    @isset($canonicalUrl)
+        <link rel="canonical" href="{{ $canonicalUrl }}">
+    @endisset
 
     {{-- hreflang: one <link> per locale (ru/kk/en/zh) plus x-default (→ ru),
          resolved from the route actually matched for this request so every
          controller gets it for free. Absolute https://www.lcpumps.kz URLs,
          reciprocal by construction — see SeoMetadataService::hreflangUrls(). --}}
-    @foreach (app(\App\Services\SeoMetadataService::class)->hreflangForCurrentRequest() as $hreflangLocale => $hreflangHref)
-        <link rel="alternate" hreflang="{{ $hreflangLocale }}" href="{{ $hreflangHref }}">
-    @endforeach
+    @if ($showHreflang)
+        @foreach (app(\App\Services\SeoMetadataService::class)->hreflangForCurrentRequest() as $hreflangLocale => $hreflangHref)
+            <link rel="alternate" hreflang="{{ $hreflangLocale }}" href="{{ $hreflangHref }}">
+        @endforeach
+    @endif
 
     {{-- Progressive-enhancement gate: see resources/css/app.css for the
          html.js-scoped rules this enables (scroll reveal, image fade-in). --}}

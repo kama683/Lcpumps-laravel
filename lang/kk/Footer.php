@@ -7,4 +7,5 @@ return [
     'certifications' => 'Сертификаттар',
     'address' => 'Өнеркәсіптік аймақ, 205а',
     'rightsReserved' => 'Барлық құқықтар қорғалған.',
+    'privacyPolicy' => 'Құпиялылық саясаты',
 ];

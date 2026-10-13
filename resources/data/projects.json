@@ -140,8 +140,8 @@
           "short": "Музей Тяньцзиня — крупнейший музей города с уникальной архитектурой в форме лебедя."
         },
         {
-          "slug": "qingdao-airport",
-          "image": "/assets/projects/qingdao-airport.jpg",
+          "slug": "beijing-olympic-park",
+          "image": "/assets/projects/beijing-olympic-park.jpg",
           "equipmentSlugs": [
             "lpt",
             "sls",
@@ -149,15 +149,15 @@
             "zhlbq"
           ],
           "equipmentType": "building",
-          "name": "Международный аэропорт Циндао Цзяодун",
-          "industry": "Муниципальная инфраструктура",
-          "location": "Цзяодун, Шаньдун, Китай",
-          "features": "Новый международный аэропорт, заменяющий аэропорт Циндао Лютин и ставший крупнейшим в провинции Шаньдун.",
-          "tasks": "Создание инженерной инфраструктуры аэропорта с расчётом на 35 миллионов пассажиров к 2025 году.",
+          "name": "Пекинский Олимпийский парк",
+          "industry": "Строительство",
+          "location": "Пекин, Китай",
+          "features": "Место проведения Олимпийских и Паралимпийских игр 2008 года общей площадью 1159 гектаров.",
+          "tasks": "Инженерное обеспечение водоснабжения и дренажа комплекса из десяти спортивных объектов, Олимпийской деревни и парковых зон.",
           "equipment": "Связанная продукция",
-          "benefits": "Оборудование LCPumps соответствует требованиям крупных транспортных и инфраструктурных объектов.",
-          "description": "Международный аэропорт Циндао Цзяодун — это аэропорт, строящийся для обслуживания города Циндао в провинции Шаньдун, Китай. Он получил одобрение в декабре 2013 года и заменит существующий международный аэропорт Циндао Лютин в качестве главного аэропорта города. Он будет расположен в Цзяодуне, Цзяочжоу, в 39 километрах (24 мили) от центра Циндао. После завершения строительства в 2019 году он станет крупнейшим аэропортом в Шаньдуне. К 2025 году новый аэропорт будет иметь 178 стоянок самолётов и обеспечивать транспортные услуги для 35 миллионов пассажиров и 500 000 тонн грузов в год. К 2045 году ожидается в общей сложности 290 стоянок самолётов, что обеспечит перевозку 55 миллионов пассажиров и одного миллиона тонн грузов.",
-          "short": "Международный аэропорт Циндао Цзяодун — новый главный аэропорт города и крупнейший в Шаньдуне."
+          "benefits": "Оборудование LCPumps обеспечивает надёжную работу инженерных систем масштабного общественного комплекса.",
+          "description": "Пекинский Олимпийский парк — место проведения Олимпийских и Паралимпийских игр 2008 года в Пекине. Он занимает общую площадь 1159 гектаров, из которых 680 гектаров на севере занимает Олимпийский лесной парк, 315 гектаров составляют центральную часть, а 164 гектара на юге приходятся на объекты Азиатских игр 1990 года. Парк был спроектирован для размещения десяти спортивных объектов, Олимпийской деревни и вспомогательной инфраструктуры, а впоследствии преобразован в комплексный многофункциональный центр активности для широкой публики.",
+          "short": "Пекинский Олимпийский парк — комплекс площадью 1159 гектаров, объединяющий объекты Олимпиады-2008 и общественные пространства."
         },
         {
           "slug": "pelabuhan-ratu-power-plant",
@@ -200,8 +200,8 @@
           "short": "Международный аэропорт Гуанчжоу Байюнь — крупнейший авиаузел провинции Гуандун и один из самых загруженных аэропортов мира."
         },
         {
-          "slug": "beijing-olympic-park",
-          "image": "/assets/projects/beijing-olympic-park.jpg",
+          "slug": "qingdao-airport",
+          "image": "/assets/projects/qingdao-airport.jpg",
           "equipmentSlugs": [
             "lpt",
             "sls",
@@ -209,15 +209,15 @@
             "zhlbq"
           ],
           "equipmentType": "building",
-          "name": "Пекинский Олимпийский парк",
-          "industry": "Строительство",
-          "location": "Пекин, Китай",
-          "features": "Место проведения Олимпийских и Паралимпийских игр 2008 года общей площадью 1159 гектаров.",
-          "tasks": "Инженерное обеспечение водоснабжения и дренажа комплекса из десяти спортивных объектов, Олимпийской деревни и парковых зон.",
+          "name": "Международный аэропорт Циндао Цзяодун",
+          "industry": "Муниципальная инфраструктура",
+          "location": "Цзяодун, Шаньдун, Китай",
+          "features": "Новый международный аэропорт, заменяющий аэропорт Циндао Лютин и ставший крупнейшим в провинции Шаньдун.",
+          "tasks": "Создание инженерной инфраструктуры аэропорта с расчётом на 35 миллионов пассажиров к 2025 году.",
           "equipment": "Связанная продукция",
-          "benefits": "Оборудование LCPumps обеспечивает надёжную работу инженерных систем масштабного общественного комплекса.",
-          "description": "Пекинский Олимпийский парк — место проведения Олимпийских и Паралимпийских игр 2008 года в Пекине. Он занимает общую площадь 1159 гектаров, из которых 680 гектаров на севере занимает Олимпийский лесной парк, 315 гектаров составляют центральную часть, а 164 гектара на юге приходятся на объекты Азиатских игр 1990 года. Парк был спроектирован для размещения десяти спортивных объектов, Олимпийской деревни и вспомогательной инфраструктуры, а впоследствии преобразован в комплексный многофункциональный центр активности для широкой публики.",
-          "short": "Пекинский Олимпийский парк — комплекс площадью 1159 гектаров, объединяющий объекты Олимпиады-2008 и общественные пространства."
+          "benefits": "Оборудование LCPumps соответствует требованиям крупных транспортных и инфраструктурных объектов.",
+          "description": "Международный аэропорт Циндао Цзяодун — это аэропорт, строящийся для обслуживания города Циндао в провинции Шаньдун, Китай. Он получил одобрение в декабре 2013 года и заменит существующий международный аэропорт Циндао Лютин в качестве главного аэропорта города. Он будет расположен в Цзяодуне, Цзяочжоу, в 39 километрах (24 мили) от центра Циндао. После завершения строительства в 2019 году он станет крупнейшим аэропортом в Шаньдуне. К 2025 году новый аэропорт будет иметь 178 стоянок самолётов и обеспечивать транспортные услуги для 35 миллионов пассажиров и 500 000 тонн грузов в год. К 2045 году ожидается в общей сложности 290 стоянок самолётов, что обеспечит перевозку 55 миллионов пассажиров и одного миллиона тонн грузов.",
+          "short": "Международный аэропорт Циндао Цзяодун — новый главный аэропорт города и крупнейший в Шаньдуне."
         },
         {
           "slug": "beijing-capital-airport",
@@ -475,8 +475,8 @@
           "short": "Тяньцзинь мұражайы — аққу пішінді бірегей сәулеті бар қаланың ең ірі мұражайы."
         },
         {
-          "slug": "qingdao-airport",
-          "image": "/assets/projects/qingdao-airport.jpg",
+          "slug": "beijing-olympic-park",
+          "image": "/assets/projects/beijing-olympic-park.jpg",
           "equipmentSlugs": [
             "lpt",
             "sls",
@@ -484,15 +484,15 @@
             "zhlbq"
           ],
           "equipmentType": "building",
-          "name": "Циндао Цзяодун халықаралық әуежайы",
-          "industry": "Муниципалдық инфрақұрылым",
-          "location": "Цзяодун, Шаньдун, Қытай",
-          "features": "Циндао Лютин әуежайын алмастырған және Шаньдун провинциясындағы ең ірі әуежайға айналған жаңа халықаралық әуежай.",
-          "tasks": "2025 жылға қарай 35 миллион жолаушыға есептелген әуежайдың инженерлік инфрақұрылымын құру.",
+          "name": "Пекин Олимпиада паркі",
+          "industry": "Құрылыс",
+          "location": "Пекин, Қытай",
+          "features": "2008 жылғы Пекин Олимпиада және Паралимпиада ойындарының алаңы, жалпы ауданы 1159 гектар.",
+          "tasks": "Он спорт нысанынан, Олимпиада ауылынан және саябақ аумағынан тұратын кешен үшін сумен жабдықтау мен дренажды инженерлік қамтамасыз ету.",
           "equipment": "Байланысты өнім",
-          "benefits": "LCPumps жабдығы ірі көлік және инфрақұрылым нысандарының талаптарына сай келеді.",
-          "description": "Циндао Цзяодун халықаралық әуежайы — Қытайдың Шаньдун провинциясындағы Циндао қаласына қызмет көрсету үшін салынып жатқан әуежай. Ол 2013 жылдың желтоқсанында бекітілді және қаланың басты әуежайы ретінде қолданыстағы Циндао Лютин халықаралық әуежайын алмастырады. Ол Циндао орталығынан 39 шақырым (24 миль) қашықтықта, Цзяочжоудың Цзяодун ауданында орналасады. 2019 жылы құрылысы аяқталғаннан кейін ол Шаньдундағы ең ірі әуежайға айналды. 2025 жылға қарай жаңа әуежайда 178 ұшақ тұрағы болып, жылына 35 миллион жолаушы мен 500 000 тонна жүкті тасымалдайтын болады. 2045 жылға қарай жалпы 290 ұшақ тұрағы болады деп күтілуде, бұл 55 миллион жолаушы мен бір миллион тонна жүкті тасымалдауды қамтамасыз етеді.",
-          "short": "Циндао Цзяодун халықаралық әуежайы — қаланың жаңа басты әуежайы әрі Шаньдундағы ең ірісі."
+          "benefits": "LCPumps жабдығы ауқымды қоғамдық кешеннің инженерлік жүйелерінің сенімді жұмысын қамтамасыз етеді.",
+          "description": "Пекин Олимпиада паркі — 2008 жылғы Пекин Олимпиада және Паралимпиада ойындарының алаңы. Оның жалпы ауданы 1159 гектарды құрайды, соның ішінде солтүстігінде 680 гектарды Олимпиада орман паркі, орталық бөлігінде 315 гектарды алаңдар, ал оңтүстігінде 164 гектарды 1990 жылғы Азия ойындарының нысандары алып жатыр. Парк он нысанды, Олимпиада ауылын және қосымша инфрақұрылымды сыйдыру үшін жобаланған, кейін ол қоғам үшін кешенді көпфункционалды белсенділік орталығына айналды.",
+          "short": "Пекин Олимпиада паркі — 2008 жылғы Олимпиада нысандары мен қоғамдық кеңістікті біріктірген 1159 гектарлық кешен."
         },
         {
           "slug": "pelabuhan-ratu-power-plant",
@@ -535,8 +535,8 @@
           "short": "Гуанчжоу Байюнь халықаралық әуежайы — Гуандун провинциясының ең ірі әуе торабы әрі әлемдегі ең жүктелген әуежайлардың бірі."
         },
         {
-          "slug": "beijing-olympic-park",
-          "image": "/assets/projects/beijing-olympic-park.jpg",
+          "slug": "qingdao-airport",
+          "image": "/assets/projects/qingdao-airport.jpg",
           "equipmentSlugs": [
             "lpt",
             "sls",
@@ -544,15 +544,15 @@
             "zhlbq"
           ],
           "equipmentType": "building",
-          "name": "Пекин Олимпиада паркі",
-          "industry": "Құрылыс",
-          "location": "Пекин, Қытай",
-          "features": "2008 жылғы Пекин Олимпиада және Паралимпиада ойындарының алаңы, жалпы ауданы 1159 гектар.",
-          "tasks": "Он спорт нысанынан, Олимпиада ауылынан және саябақ аумағынан тұратын кешен үшін сумен жабдықтау мен дренажды инженерлік қамтамасыз ету.",
+          "name": "Циндао Цзяодун халықаралық әуежайы",
+          "industry": "Муниципалдық инфрақұрылым",
+          "location": "Цзяодун, Шаньдун, Қытай",
+          "features": "Циндао Лютин әуежайын алмастырған және Шаньдун провинциясындағы ең ірі әуежайға айналған жаңа халықаралық әуежай.",
+          "tasks": "2025 жылға қарай 35 миллион жолаушыға есептелген әуежайдың инженерлік инфрақұрылымын құру.",
           "equipment": "Байланысты өнім",
-          "benefits": "LCPumps жабдығы ауқымды қоғамдық кешеннің инженерлік жүйелерінің сенімді жұмысын қамтамасыз етеді.",
-          "description": "Пекин Олимпиада паркі — 2008 жылғы Пекин Олимпиада және Паралимпиада ойындарының алаңы. Оның жалпы ауданы 1159 гектарды құрайды, соның ішінде солтүстігінде 680 гектарды Олимпиада орман паркі, орталық бөлігінде 315 гектарды алаңдар, ал оңтүстігінде 164 гектарды 1990 жылғы Азия ойындарының нысандары алып жатыр. Парк он нысанды, Олимпиада ауылын және қосымша инфрақұрылымды сыйдыру үшін жобаланған, кейін ол қоғам үшін кешенді көпфункционалды белсенділік орталығына айналды.",
-          "short": "Пекин Олимпиада паркі — 2008 жылғы Олимпиада нысандары мен қоғамдық кеңістікті біріктірген 1159 гектарлық кешен."
+          "benefits": "LCPumps жабдығы ірі көлік және инфрақұрылым нысандарының талаптарына сай келеді.",
+          "description": "Циндао Цзяодун халықаралық әуежайы — Қытайдың Шаньдун провинциясындағы Циндао қаласына қызмет көрсету үшін салынып жатқан әуежай. Ол 2013 жылдың желтоқсанында бекітілді және қаланың басты әуежайы ретінде қолданыстағы Циндао Лютин халықаралық әуежайын алмастырады. Ол Циндао орталығынан 39 шақырым (24 миль) қашықтықта, Цзяочжоудың Цзяодун ауданында орналасады. 2019 жылы құрылысы аяқталғаннан кейін ол Шаньдундағы ең ірі әуежайға айналды. 2025 жылға қарай жаңа әуежайда 178 ұшақ тұрағы болып, жылына 35 миллион жолаушы мен 500 000 тонна жүкті тасымалдайтын болады. 2045 жылға қарай жалпы 290 ұшақ тұрағы болады деп күтілуде, бұл 55 миллион жолаушы мен бір миллион тонна жүкті тасымалдауды қамтамасыз етеді.",
+          "short": "Циндао Цзяодун халықаралық әуежайы — қаланың жаңа басты әуежайы әрі Шаньдундағы ең ірісі."
         },
         {
           "slug": "beijing-capital-airport",
@@ -810,8 +810,8 @@
           "short": "The Tianjin Museum is the city's largest museum, featuring unique swan-shaped architecture."
         },
         {
-          "slug": "qingdao-airport",
-          "image": "/assets/projects/qingdao-airport.jpg",
+          "slug": "beijing-olympic-park",
+          "image": "/assets/projects/beijing-olympic-park.jpg",
           "equipmentSlugs": [
             "lpt",
             "sls",
@@ -819,15 +819,15 @@
             "zhlbq"
           ],
           "equipmentType": "building",
-          "name": "Qingdao Jiaodong International Airport",
-          "industry": "Municipal Infrastructure",
-          "location": "Jiaodong, Shandong, China",
-          "features": "A new international airport replacing Qingdao Liuting Airport, becoming the largest in Shandong Province.",
-          "tasks": "Building the airport's engineering infrastructure designed for 35 million passengers by 2025.",
+          "name": "Beijing Olympic Park",
+          "industry": "Construction",
+          "location": "Beijing, China",
+          "features": "The venue for the 2008 Beijing Olympic and Paralympic Games, covering a total area of 1,159 hectares.",
+          "tasks": "Engineering support for water supply and drainage across a complex of ten sports venues, the Olympic Village, and park grounds.",
           "equipment": "Related products",
-          "benefits": "LCPumps equipment meets the requirements of major transport and infrastructure facilities.",
-          "description": "Qingdao Jiaodong International Airport is an airport built to serve the city of Qingdao in Shandong Province, China. Approved in December 2013, it replaces the existing Qingdao Liuting International Airport as the city's main airport. It is located in Jiaodong, Jiaozhou, 39 kilometers (24 miles) from central Qingdao. Following its completion in 2019, it became the largest airport in Shandong. By 2025, the new airport will have 178 aircraft stands and provide transport services for 35 million passengers and 500,000 tons of cargo per year. By 2045, a total of 290 aircraft stands is expected, handling 55 million passengers and one million tons of cargo.",
-          "short": "Qingdao Jiaodong International Airport is the city's new main airport and the largest in Shandong."
+          "benefits": "LCPumps equipment ensures the reliable operation of the engineering systems across this large public complex.",
+          "description": "Beijing Olympic Park is the venue for the 2008 Beijing Olympic and Paralympic Games. It covers a total area of 1,159 hectares, of which 680 hectares in the north form the Olympic Forest Park, 315 hectares make up the central zone, and 164 hectares in the south are occupied by facilities from the 1990 Asian Games. The park was designed to house ten venues, the Olympic Village, and supporting facilities, and has since been transformed into an integrated, multifunctional activity center for the public.",
+          "short": "Beijing Olympic Park is a 1,159-hectare complex combining the venues of the 2008 Olympics with public recreational space."
         },
         {
           "slug": "pelabuhan-ratu-power-plant",
@@ -870,8 +870,8 @@
           "short": "Guangzhou Baiyun International Airport is Guangdong's largest aviation hub and one of the world's busiest airports."
         },
         {
-          "slug": "beijing-olympic-park",
-          "image": "/assets/projects/beijing-olympic-park.jpg",
+          "slug": "qingdao-airport",
+          "image": "/assets/projects/qingdao-airport.jpg",
           "equipmentSlugs": [
             "lpt",
             "sls",
@@ -879,15 +879,15 @@
             "zhlbq"
           ],
           "equipmentType": "building",
-          "name": "Beijing Olympic Park",
-          "industry": "Construction",
-          "location": "Beijing, China",
-          "features": "The venue for the 2008 Beijing Olympic and Paralympic Games, covering a total area of 1,159 hectares.",
-          "tasks": "Engineering support for water supply and drainage across a complex of ten sports venues, the Olympic Village, and park grounds.",
+          "name": "Qingdao Jiaodong International Airport",
+          "industry": "Municipal Infrastructure",
+          "location": "Jiaodong, Shandong, China",
+          "features": "A new international airport replacing Qingdao Liuting Airport, becoming the largest in Shandong Province.",
+          "tasks": "Building the airport's engineering infrastructure designed for 35 million passengers by 2025.",
           "equipment": "Related products",
-          "benefits": "LCPumps equipment ensures the reliable operation of the engineering systems across this large public complex.",
-          "description": "Beijing Olympic Park is the venue for the 2008 Beijing Olympic and Paralympic Games. It covers a total area of 1,159 hectares, of which 680 hectares in the north form the Olympic Forest Park, 315 hectares make up the central zone, and 164 hectares in the south are occupied by facilities from the 1990 Asian Games. The park was designed to house ten venues, the Olympic Village, and supporting facilities, and has since been transformed into an integrated, multifunctional activity center for the public.",
-          "short": "Beijing Olympic Park is a 1,159-hectare complex combining the venues of the 2008 Olympics with public recreational space."
+          "benefits": "LCPumps equipment meets the requirements of major transport and infrastructure facilities.",
+          "description": "Qingdao Jiaodong International Airport is an airport built to serve the city of Qingdao in Shandong Province, China. Approved in December 2013, it replaces the existing Qingdao Liuting International Airport as the city's main airport. It is located in Jiaodong, Jiaozhou, 39 kilometers (24 miles) from central Qingdao. Following its completion in 2019, it became the largest airport in Shandong. By 2025, the new airport will have 178 aircraft stands and provide transport services for 35 million passengers and 500,000 tons of cargo per year. By 2045, a total of 290 aircraft stands is expected, handling 55 million passengers and one million tons of cargo.",
+          "short": "Qingdao Jiaodong International Airport is the city's new main airport and the largest in Shandong."
         },
         {
           "slug": "beijing-capital-airport",
@@ -1145,8 +1145,8 @@
           "short": "天津博物馆是该市最大的博物馆,拥有独特的天鹅造型建筑。"
         },
         {
-          "slug": "qingdao-airport",
-          "image": "/assets/projects/qingdao-airport.jpg",
+          "slug": "beijing-olympic-park",
+          "image": "/assets/projects/beijing-olympic-park.jpg",
           "equipmentSlugs": [
             "lpt",
             "sls",
@@ -1154,15 +1154,15 @@
             "zhlbq"
           ],
           "equipmentType": "building",
-          "name": "青岛胶东国际机场",
-          "industry": "市政基础设施",
-          "location": "中国山东胶东",
-          "features": "取代青岛流亭机场的新建国际机场,成为山东省最大的机场。",
-          "tasks": "建设面向2025年3500万旅客吞吐量设计的机场工程基础设施。",
+          "name": "北京奥林匹克公园",
+          "industry": "建筑",
+          "location": "中国北京",
+          "features": "2008年北京奥运会及残奥会的比赛场地,总面积达1159公顷。",
+          "tasks": "为包含十座场馆、奥运村及园区在内的综合体提供供水与排水工程保障。",
           "equipment": "相关产品",
-          "benefits": "LCPumps设备满足大型交通及基础设施项目的要求。",
-          "description": "青岛胶东国际机场是为服务中国山东省青岛市而建设的机场。该项目于2013年12月获批,将取代现有的青岛流亭国际机场,成为该市的主要机场。机场位于胶州胶东,距青岛市中心39公里(24英里)。2019年建成后,该机场已成为山东省最大的机场。到2025年,新机场将拥有178个机位,年运输能力达3500万人次旅客及50万吨货物。到2045年,预计机位总数将达290个,可运送5500万人次旅客及100万吨货物。",
-          "short": "青岛胶东国际机场是该市新的主要机场,也是山东省最大的机场。"
+          "benefits": "LCPumps设备保障了这一大型公共综合体工程系统的可靠运行。",
+          "description": "北京奥林匹克公园是2008年北京奥运会及残奥会的比赛场地,总占地面积达1159公顷,其中北部680公顷为奥林匹克森林公园,中部315公顷为核心区,南部164公顷分布着1990年亚运会的相关设施。公园设计可容纳十座场馆、奥运村及配套设施,后来已转变为面向公众的综合性多功能活动中心。",
+          "short": "北京奥林匹克公园占地1159公顷,集2008年奥运场馆与公共休闲空间于一体。"
         },
         {
           "slug": "pelabuhan-ratu-power-plant",
@@ -1205,8 +1205,8 @@
           "short": "广州白云国际机场是广东省最大的航空枢纽,也是全球最繁忙的机场之一。"
         },
         {
-          "slug": "beijing-olympic-park",
-          "image": "/assets/projects/beijing-olympic-park.jpg",
+          "slug": "qingdao-airport",
+          "image": "/assets/projects/qingdao-airport.jpg",
           "equipmentSlugs": [
             "lpt",
             "sls",
@@ -1214,15 +1214,15 @@
             "zhlbq"
           ],
           "equipmentType": "building",
-          "name": "北京奥林匹克公园",
-          "industry": "建筑",
-          "location": "中国北京",
-          "features": "2008年北京奥运会及残奥会的比赛场地,总面积达1159公顷。",
-          "tasks": "为包含十座场馆、奥运村及园区在内的综合体提供供水与排水工程保障。",
+          "name": "青岛胶东国际机场",
+          "industry": "市政基础设施",
+          "location": "中国山东胶东",
+          "features": "取代青岛流亭机场的新建国际机场,成为山东省最大的机场。",
+          "tasks": "建设面向2025年3500万旅客吞吐量设计的机场工程基础设施。",
           "equipment": "相关产品",
-          "benefits": "LCPumps设备保障了这一大型公共综合体工程系统的可靠运行。",
-          "description": "北京奥林匹克公园是2008年北京奥运会及残奥会的比赛场地,总占地面积达1159公顷,其中北部680公顷为奥林匹克森林公园,中部315公顷为核心区,南部164公顷分布着1990年亚运会的相关设施。公园设计可容纳十座场馆、奥运村及配套设施,后来已转变为面向公众的综合性多功能活动中心。",
-          "short": "北京奥林匹克公园占地1159公顷,集2008年奥运场馆与公共休闲空间于一体。"
+          "benefits": "LCPumps设备满足大型交通及基础设施项目的要求。",
+          "description": "青岛胶东国际机场是为服务中国山东省青岛市而建设的机场。该项目于2013年12月获批,将取代现有的青岛流亭国际机场,成为该市的主要机场。机场位于胶州胶东,距青岛市中心39公里(24英里)。2019年建成后,该机场已成为山东省最大的机场。到2025年,新机场将拥有178个机位,年运输能力达3500万人次旅客及50万吨货物。到2045年,预计机位总数将达290个,可运送5500万人次旅客及100万吨货物。",
+          "short": "青岛胶东国际机场是该市新的主要机场,也是山东省最大的机场。"
         },
         {
           "slug": "beijing-capital-airport",

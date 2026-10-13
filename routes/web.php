@@ -60,6 +60,8 @@ LocalizedRoutes::register(function (): void {
     Route::get('/services', [ServicesController::class, 'index'])->name('services.index');
 
     Route::get('/solutions', [SolutionsController::class, 'index'])->name('solutions.index');
+
+    Route::view('/privacy-policy', 'pages.privacy-policy')->name('privacy-policy');
 });
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.xml');

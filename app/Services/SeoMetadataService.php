@@ -41,6 +41,7 @@ class SeoMetadataService
             ['name' => 'contact.index', 'params' => []],
             ['name' => 'faq.index', 'params' => []],
             ['name' => 'news.index', 'params' => []],
+            ['name' => 'privacy-policy', 'params' => []],
             ['name' => 'products.index', 'params' => []],
             ['name' => 'products.control', 'params' => []],
             ['name' => 'products.pumps', 'params' => []],
@@ -111,7 +112,13 @@ class SeoMetadataService
             $name = substr($name, strlen(LocalizedRoutes::LOCALIZED_NAME_PREFIX));
         }
 
-        $params = $route->parameters();
+        // Only URI placeholders belong in alternate URLs. Route::view also
+        // stores its internal "view" and "status" defaults as parameters;
+        // passing those to route() would leak them into hreflang query strings.
+        $params = array_intersect_key(
+            $route->parameters(),
+            array_flip($route->parameterNames()),
+        );
         unset($params['locale']);
 
         return $this->hreflangUrls($name, $params);
@@ -128,7 +135,7 @@ class SeoMetadataService
             // Ensure the home route ends with a trailing slash to match the
             // canonical format used across the project (https://www.lcpumps.kz/).
             if ($routeName === 'home' && $url !== '' && ! str_ends_with($url, '/')) {
-                $url = $url . '/';
+                $url = $url.'/';
             }
 
             return $url;
@@ -177,6 +184,7 @@ class SeoMetadataService
                 'contact.index' => __('PageMetadata.contact.title'),
                 'faq.index' => __('PageMetadata.faq.title'),
                 'news.index' => __('PageMetadata.news.title'),
+                'privacy-policy' => __('PrivacyPolicy.meta.title'),
                 'products.index' => __('CategoryPage.allPumpsTitle'),
                 'products.pumps' => __('CategoryPage.pumpsTitle'),
                 'products.valves' => __('CategoryPage.valvesTitle'),
@@ -205,6 +213,7 @@ class SeoMetadataService
                 'contact.index' => __('PageMetadata.contact.description'),
                 'faq.index' => __('PageMetadata.faq.description'),
                 'news.index' => __('PageMetadata.news.description'),
+                'privacy-policy' => __('PrivacyPolicy.meta.description'),
                 'projects.index' => __('PageMetadata.projects.description'),
                 'services.index' => __('PageMetadata.services.description'),
                 'solutions.index' => __('PageMetadata.solutions.description'),

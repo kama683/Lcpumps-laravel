@@ -7,4 +7,5 @@ return [
     'certifications' => 'Сертификаты',
     'address' => 'Промзона территория, 205а',
     'rightsReserved' => 'Все права защищены.',
+    'privacyPolicy' => 'Политика конфиденциальности',
 ];

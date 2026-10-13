@@ -19,7 +19,7 @@
             alt=""
             width="1666"
             height="944"
-            class="relative z-1 w-full h-auto object-contain"
+            class="relative z-1 w-full h-auto object-contain translate-x-6"
         >
     </div>
 @else

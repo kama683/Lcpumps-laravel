@@ -7,4 +7,5 @@ return [
     'certifications' => 'Certifications',
     'address' => 'Industrial Zone, 205a',
     'rightsReserved' => 'All rights reserved.',
+    'privacyPolicy' => 'Privacy Policy',
 ];

@@ -17,6 +17,10 @@ const NAV_TRANSPARENT_INACTIVE = NAV_BASE + 'text-white/85 hover:text-white';
 const NAV_SOLID_ACTIVE = NAV_BASE + 'text-primary border-b-2 border-primary';
 const NAV_SOLID_INACTIVE = NAV_BASE + 'text-nav hover:text-primary';
 
+const LANGUAGE_BASE = 'list-none [&::-webkit-details-marker]:hidden flex items-center gap-1.5 rounded-sm px-2 py-2.5 tablet:py-1 transition-colors duration-300 cursor-pointer active:opacity-60 ';
+const LANGUAGE_TRANSPARENT = LANGUAGE_BASE + 'text-white hover:text-white/80 group-open:text-white';
+const LANGUAGE_SOLID = LANGUAGE_BASE + 'text-nav hover:text-primary group-open:text-primary';
+
 const MENU_BTN_TRANSPARENT = 'tablet:hidden ml-auto flex size-11 shrink-0 items-center justify-center rounded-md border transition-colors duration-300 border-white/40 text-white hover:border-white hover:text-white';
 const MENU_BTN_SOLID = 'tablet:hidden ml-auto flex size-11 shrink-0 items-center justify-center rounded-md border transition-colors duration-300 border-border-mid text-heading hover:border-primary hover:text-primary';
 
@@ -46,6 +50,9 @@ function applyTransparentState(header, transparent, isHome) {
               ? NAV_SOLID_ACTIVE
               : NAV_SOLID_INACTIVE;
     });
+
+    const languageToggle = header.querySelector('[data-header-language-toggle]');
+    if (languageToggle) languageToggle.className = transparent ? LANGUAGE_TRANSPARENT : LANGUAGE_SOLID;
 
     const menuToggle = header.querySelector('[data-header-menu-toggle]');
     if (menuToggle) menuToggle.className = transparent ? MENU_BTN_TRANSPARENT : MENU_BTN_SOLID;

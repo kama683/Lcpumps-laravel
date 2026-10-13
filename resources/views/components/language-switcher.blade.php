@@ -22,7 +22,8 @@
 @else
     <details data-language-dropdown class="group relative text-sm font-semibold">
         <summary
-            class="list-none [&::-webkit-details-marker]:hidden flex items-center gap-1.5 rounded-sm px-2 py-2.5 tablet:py-1 transition-colors duration-300 cursor-pointer active:opacity-60 {{ $light ? 'text-white hover:text-white/80' : 'text-nav hover:text-primary' }}"
+            data-header-language-toggle
+            class="list-none [&::-webkit-details-marker]:hidden flex items-center gap-1.5 rounded-sm px-2 py-2.5 tablet:py-1 transition-colors duration-300 cursor-pointer active:opacity-60 {{ $light ? 'text-white hover:text-white/80 group-open:text-white' : 'text-nav hover:text-primary group-open:text-primary' }}"
         >
             {{ __('LanguageSwitcher.'.$current) }}
             <x-icon name="chevron-down" stroke-width="2.25" class="size-3.5 shrink-0 transition-transform duration-200 group-open:rotate-180" />

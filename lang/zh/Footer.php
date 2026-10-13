@@ -7,4 +7,5 @@ return [
     'certifications' => '认证证书',
     'address' => '工业区205a栋',
     'rightsReserved' => '版权所有。',
+    'privacyPolicy' => '隐私政策',
 ];
