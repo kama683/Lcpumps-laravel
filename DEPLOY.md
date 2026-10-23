@@ -65,6 +65,11 @@ deploy to work.
 
 ## Step 2 — Build package (already done, ready to upload)
 
+> **Initial-install procedure (zip archive).** Steps 2–3 describe the
+> from-scratch deployment. Day-to-day updates now go through
+> [Continuous deployment](#continuous-deployment-plesk-git--github-webhook)
+> — a plain `git push` to `main`. Keep these steps for redeploying from zero.
+
 Built and tested locally — this isn't a "you do this" step, it's what
 was already produced:
 
@@ -113,6 +118,11 @@ to do here.
 ---
 
 ## Step 3 — Upload
+
+> **Initial-install procedure (zip archive).** This is the first-time
+> upload only. Current updates are delivered by Plesk Git — see
+> [Continuous deployment](#continuous-deployment-plesk-git--github-webhook).
+> Do not re-upload the zip over a running site.
 
 **One file: `lcpumps-laravel-deploy.zip`**, ~161 MB, sitting at
 `C:\Users\kamro\Desktop\bellery pumps\lcpumps-laravel-deploy.zip` on this
@@ -262,6 +272,12 @@ catching it at the source.
 don't leave the `admin:seed-user` task sitting in the list with real
 credentials in its argument history longer than needed to run it once.
 
+> **Note:** these 8 one-shot tasks are deleted after the initial install,
+> but the scheduler now holds **two permanent tasks** (`optimize` and
+> `migrate --force`) that support auto-deploy — see
+> [Continuous deployment](#continuous-deployment-plesk-git--github-webhook).
+> Do **not** delete those two.
+
 **If `.env` is ever edited again after this point**, re-run `config:cache`
 — it's a snapshot, not re-read live from `.env` after being cached. (Step 8
 adds/removes a temporary *route*, not an `.env` change, so it needs
@@ -404,6 +420,135 @@ total. If it fails with a generic proxy/server error page instead of the
 app's own "too large" message, Plesk → **Сайты и домены** → `lcpumps.kz`
 → **Apache и nginx настройки** → raise the additional-directives body-size
 cap to match (`64m`, matching `post_max_size`).
+
+---
+
+## Continuous deployment (Plesk Git + GitHub webhook)
+
+Set up and verified on the real PS.kz server on 2026-10-23. After the
+initial install (Steps 1–11), updates are delivered by Plesk pulling from
+GitHub — no zip, no FTP.
+
+> **Every push to `main` is a production deploy.** There is no staging
+> step and no approval gate. Work on a branch and merge to `main` only
+> when the change is ready to go live.
+
+### How it is wired
+
+- **Plesk → Сайты и домены → `lcpumps.kz` → Git.** Repository
+  `Lcpumps-laravel.git`, type "Удалённый репозиторий", URL
+  `https://github.com/kama683/Lcpumps-laravel.git` (public repo, no
+  login/password), branch `main`.
+- **Deploy mode: "Автоматически".** Server path: `/laravel` (the project
+  root — **not** `/laravel/public`). Plesk keeps its bare clone in
+  `/var/www/vhosts/lcpumps.kz/git/`.
+- **GitHub → Settings → Webhooks:** Payload URL is the "URL-адрес для
+  веб-хука" shown in the repository settings in Plesk (it contains a
+  unique id — copy it from there, it is deliberately not written in this
+  file). Content type `application/json`, **push event only**, SSL
+  verification on.
+
+### What a deploy touches — and what it doesn't
+
+Plesk writes into `/laravel` only the files **tracked by git**, over the
+existing ones. It does not delete or modify anything untracked or ignored:
+
+- `.env`
+- `vendor/`
+- `storage/` (logs, sessions, uploaded files)
+- the `public/storage` symlink
+- `bootstrap/cache/*.php`
+- the database
+
+Side effect: `tests/`, `scripts/`, `package.json`, `vite.config.js`,
+`phpunit.xml` and similar files, which the Step 3 zip stripped out, now
+land on the server. This is safe — all of them sit outside the document
+root (`laravel/public`) — so don't be alarmed when you see them in File
+Manager.
+
+`public/build/` is committed, so the frontend ships with the deploy and
+Node is not needed on the server.
+
+### Limitation: no shell, so no "additional deploy actions"
+
+Hosting settings show "Доступ по SSH: Запрещено" (tariff M; the client
+cannot change it). As a result Plesk Git's **"Дополнительные действия
+развертывания" do not work**: they fail immediately with an empty error,
+and not even `pwd`/`echo` runs (tested: a `pwd > deploy-debug.txt` action
+never created the file). **Leave the additional-actions checkbox off.**
+
+If PS.kz ever enables a chrooted bash for user `lcpumpsk`, the commands
+below can move into additional actions (re-check the PHP path first):
+
+```
+/opt/plesk/php/8.3/bin/php artisan migrate --force
+/opt/plesk/php/8.3/bin/php artisan optimize
+```
+
+### Post-deploy commands via Scheduled Tasks (replaces additional actions)
+
+Two **permanent** tasks in Plesk → Задачи планировщика. Both: type
+"Выполнить PHP-скрипт", script `laravel/artisan`, PHP 8.3.
+
+| Arguments | State | Notes |
+|---|---|---|
+| `optimize` | Active, hourly (at :00), notify "Только ошибки" | Rebuilds the config/events/routes/views cache. Verified: runs in ~2 s and refreshes `bootstrap/cache/config.php`, `events.php`, `routes-v7.php` |
+| `migrate --force` | **Not active** — run only with the "Запустить" button | Verified: output "Nothing to migrate" |
+
+**Why this matters.** Production runs with `config:cache` and
+`route:cache` (Step 6). Without a rebuild after a deploy, new or changed
+routes and config values are **not applied** — up to an hour's delay with
+the hourly task. Blade templates recompile on their own (by mtime), and
+PHP files are picked up automatically (OPcache `validate_timestamps=On`,
+`revalidate_freq=2`).
+
+### What to do after a push, by type of change
+
+| Change | Procedure |
+|---|---|
+| Ordinary: Blade, PHP, CSS/JS in `public/build` | Push, done. Routes/config apply within the hour; for an immediate effect press "Запустить" on the `optimize` task |
+| New migration | Push, then **immediately** "Запустить" `migrate --force`, then `optimize`. Between the deploy and the migration the new code may query columns that do not exist yet — make migrations backward-compatible, or push them in an earlier separate commit. Destructive migrations (drop column) only deliberately and after a backup |
+| `composer.json` / `composer.lock` changed | After the deploy: Plesk → PHP Composer → Install (`--no-dev`). PHP's `exec`/`proc_open` are disabled on the server, but the Plesk Composer tool runs separately and works. Then `optimize` |
+| `.env` changed | Edit by hand in File Manager (it is not in git), then `optimize` — the config cache is a snapshot |
+
+### How to confirm a deploy went through
+
+1. **GitHub → Settings → Webhooks → Recent Deliveries:** green check on
+   the `push` delivery.
+2. **Plesk → Git → "Последние коммиты":** shows the new commit.
+3. **File Manager:** the modification time of a file you changed under
+   `laravel/` has updated.
+4. **The site:** `/`, `/products`, `/admin/login`, and `/ru` (must
+   redirect to `/`).
+
+To deploy manually without a push: Plesk → Git → "Развернуть сейчас".
+
+### Troubleshooting (problems actually hit during setup)
+
+- **Initial clone failed twice** with `RPC failed; curl 92 HTTP/2 stream 0
+  was not closed cleanly: CANCEL`, `early EOF`, and `invalid index-pack
+  output` — network drops between the host and GitHub on a large repo.
+  Fix: just retry later (it succeeded the next day). A failed attempt
+  rolls itself back; nothing needs deleting. Fallback: an SSH URL plus a
+  read-only deploy key.
+- **Repository settings window opens empty** (`настройки %%repository%%`)
+  — a Plesk UI glitch. Do **not** press "Применить"; close it and press F5.
+- **Chrome autofills the "Имя пользователя/Пароль" fields** in the
+  repository settings. Clear them before "Применить", otherwise the
+  password gets saved in Plesk. If there is nothing to change, close with
+  "Отменить".
+- **The additional-actions log does not expand** (empty bar). For
+  diagnostics, write command output to a file instead.
+
+### Rollback
+
+- **Bad commit:** `git revert` it and push — auto-deploy restores the
+  files — then run `optimize`.
+- **Serious breakage:** Plesk → Резервное копирование и восстановление.
+  Daily scheduled backups exist, plus a manual full backup taken
+  "before connecting Git" on 2026-10-22.
+- **Rolling back a migration:** only via a one-off Scheduled Task running
+  `migrate:rollback`, or by restoring the database from backup.
 
 ---
 

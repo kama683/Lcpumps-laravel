@@ -96,5 +96,3 @@ canonical one for production.
 - `storage/app/public` and `storage/app/private` (uploaded files)
 
 See `DEPLOY.md` for the PS.kz (Plesk) specifics.
-
-<!-- test autodeploy -->
